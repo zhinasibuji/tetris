@@ -7,6 +7,7 @@ SQUARE_SIZE = 20
 MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 2
+EMPTY = 0
 
 pygame.init()
 
@@ -17,7 +18,7 @@ def display_square(x,y):
 def display_map():
     for x in range(MAP_WIDTH):
         for y in range(MAP_HEIGHT):
-            if square_map[y][x] != 0:
+            if square_map[y][x] != EMPTY:
                 display_square(x,y)
 
 
@@ -58,8 +59,8 @@ screen = pygame.display.set_mode((400,600))
 pygame.display.set_caption('hello world')
 clock = pygame.time.Clock()
 running = True
-square_map = [[0 for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
-square_map_dropped = [[0 for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
+square_map = [[EMPTY for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
+square_map_dropped = [[EMPTY for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
 create_square(3,4)
 
 while running:
