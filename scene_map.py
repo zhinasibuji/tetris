@@ -37,7 +37,7 @@ class SceneMap:
         self.squares = []
 
     def call(self) -> None:
-        self.create_square(3, 4)
+        self.create_squareset()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
