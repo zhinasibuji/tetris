@@ -1,6 +1,7 @@
 import sys
 import pygame
 import copy
+import random
 
 class Square:
     def __init__(self, x: int, y: int) -> None:
@@ -34,9 +35,9 @@ FPS = 60
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
-        self.create_square(3, 4)
 
     def call(self) -> None:
+        self.create_square(3, 4)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -54,7 +55,8 @@ class SceneMap:
             self.display_square(square.x, square.y)
 
     def create_squareset(self) -> None:
-        pass
+        x = random.randint(0, MAP_WIDTH - 1)
+        self.create_square(x, 0)
 
     def manyihang(self) -> None:
         pass
@@ -97,10 +99,6 @@ class SceneMap:
     def create_square(self, x: int, y: int) -> None:
         s = Square(x, y)
         self.squares.append(s)
-
-    @staticmethod
-    def empty_map() -> list:
-        return [[None for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
 
     @staticmethod
     def display_square(x: int, y: int) -> None:
