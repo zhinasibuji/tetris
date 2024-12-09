@@ -21,7 +21,7 @@ class Square:
         self.__y += 1
 
     def yuejie(self) -> bool:
-        return self.__y > MAP_HEIGHT
+        return self.__y >= MAP_HEIGHT
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -30,11 +30,15 @@ SQUARE_SIZE = 20
 MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 2
-FPS = 60
+FPS = 5
 
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
+
+    #仅测试用代码
+    def print_squares(self):
+        print([(square.x, square.y) for square in self.squares])
 
     def call(self) -> None:
         self.create_squareset()
@@ -107,8 +111,9 @@ class SceneMap:
 
     @staticmethod
     def chonghe(squares) -> bool:
+        #set与list长度相等时没有元素重合
         ls = [(square.x, square.y) for square in squares]
-        return len(ls) == len(set(ls))
+        return len(ls) != len(set(ls))
 
 
 if __name__ == '__main__':
