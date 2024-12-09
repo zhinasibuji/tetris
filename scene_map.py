@@ -44,17 +44,17 @@ class SceneMap:
                     sys.exit()
 
             self.square_map_dropped = self.get_dropped()
-            #若为空数组表示已着陆
+            #若为空数组则表示已着陆
 
             if self.square_map_dropped:
+                self.square_map = self.square_map_dropped
+            else:
                 self.create_squareset()
                 squares = self.all_squares_in_map()
                 if self.chonghe(squares):
                     self.gameover()
                 elif self.manyihang():
                     self.xiaochu()
-            else:
-                self.square_map = self.square_map_dropped
 
             screen.fill(BLACK)
             self.display_map()
