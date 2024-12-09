@@ -4,21 +4,22 @@ import pygame
 class Square:
     def __init__(self, x: int, y: int) -> None:
         self.dropping = True
-        self.__position = [x, y]
+        self.__x = x
+        self.__y = y
 
     @property
     def x(self) -> int:
-        return self.__position[0]
+        return self.__x
 
     @property
     def y(self) -> int:
-        return self.__position[1]
+        return self.__y
 
     def drop(self) -> None:
-        self.__position[1] += 1
+        self.__y += 1
 
     def yuejie(self) -> bool:
-        return self.__position[1] > MAP_HEIGHT
+        return self.__y > MAP_HEIGHT
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -64,16 +65,10 @@ class SceneMap:
     def display_map(self) -> None:
         for x in range(MAP_WIDTH):
             for y in range(MAP_HEIGHT):
-                if self.square_map[y][x] != EMPTY:
+                if self.square_map[y][x]:
                     self.display_square(x,y)
 
     def create_squareset(self) -> None:
-        pass
-
-    def yuejie(self) -> None:
-        pass
-
-    def chonghe(self, squares) -> None:
         pass
 
     def manyihang(self) -> None:
@@ -93,7 +88,7 @@ class SceneMap:
         squares = []
         for x in range(MAP_WIDTH):
             for y in range(MAP_HEIGHT):
-                if self.square_map[y][x] != EMPTY:
+                if self.square_map[y][x]:
                     squares.append(self.square_map[y][x])
         return squares
 
@@ -140,15 +135,18 @@ class SceneMap:
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
         pygame.draw.rect(screen, WHITE, square_rect, width=2)
 
+    @staticmethod
+    def chonghe(squares) -> bool:
+        ls = [(square.x, square.y) for square in squares]
+        return len(ls) == len(set(ls))
+
 
 if __name__ == '__main__':
     pygame.init()
 
     #方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
     screen = pygame.display.set_mode((400,600))
-    pygame.display.set_caption('hello world')
     clock = pygame.time.Clock()
-    running = True
 
     scene = SceneMap()
     scene.call()
