@@ -2,17 +2,17 @@ import sys
 import pygame
 
 class Square:
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int, y: int) -> None:
         self.dropping = True
         self.position = [x, y]
 
-    def drop(self):
+    def drop(self) -> None:
         self.position[1] += 1
 
-    def yuejie(self):
+    def yuejie(self) -> None:
         pass
 
-    def chonghe(self):
+    def chonghe(self) -> None:
         pass
 
 WHITE = (255,255,255)
@@ -25,25 +25,14 @@ LINE_THICKNESS = 2
 EMPTY = 0
 FPS = 60
 
-pygame.init()
-
-#方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
-screen = pygame.display.set_mode((400,600))
-pygame.display.set_caption('hello world')
-clock = pygame.time.Clock()
-running = True
-
-def empty_map():
-    return [[EMPTY for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
-
-class Scene_Map:
-    def __init__(self):
-        self.square_map = empty_map()
-        self.square_map_dropped = empty_map()
+class SceneMap:
+    def __init__(self) -> None:
+        self.square_map = self.empty_map()
+        self.square_map_dropped = self.empty_map()
         self.landed = False
         self.create_square(3, 4)
 
-    def call(self):
+    def call(self) -> None:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -53,7 +42,8 @@ class Scene_Map:
 
             if self.landed:
                 self.create_squareset()
-                if self.chonghe():
+                squares = self.all_squares_in_map()
+                if self.chonghe(squares):
                     self.gameover()
                 elif self.manyihang():
                     self.xiaochu()
@@ -65,34 +55,34 @@ class Scene_Map:
             pygame.display.flip()
             clock.tick(FPS)
 
-    def display_map(self):
+    def display_map(self) -> None:
         for x in range(MAP_WIDTH):
             for y in range(MAP_HEIGHT):
                 if self.square_map[y][x] != EMPTY:
                     self.display_square(x,y)
 
-    def create_squareset(self):
+    def create_squareset(self) -> None:
         pass
 
-    def yuejie(self):
+    def yuejie(self) -> None:
         pass
 
-    def chonghe(self, squares):
+    def chonghe(self, squares) -> None:
         pass
 
-    def manyihang(self):
+    def manyihang(self) -> None:
         pass
 
-    def xiaochu(self):
+    def xiaochu(self) -> None:
         pass
 
-    def drop(self):
+    def drop(self) -> None:
         pass
 
-    def gameover(self):
+    def gameover(self) -> None:
         pass
 
-    def all_squares_in_map(self):
+    def all_squares_in_map(self) -> list:
         squares = []
         for x in range(MAP_WIDTH):
             for y in range(MAP_HEIGHT):
@@ -101,9 +91,9 @@ class Scene_Map:
         return squares
 
 
-    def get_dropped(self):
+    def get_dropped(self) -> list:
         squares = self.all_squares_in_map()
-        new_map = empty_map()
+        new_map = self.empty_map()
         for square in squares:
             if square.dropping:
                 square.drop()
@@ -125,13 +115,27 @@ class Scene_Map:
 
         return new_map
 
-    def create_square(self, x: int, y: int):
+    def create_square(self, x: int, y: int) -> None:
         self.square_map[x][y] = Square(x, y)
 
     @staticmethod
-    def display_square(x, y):
-        square_rect = pygame.Rect(x*20, y*20, 20, 20)
-        pygame.draw.rect(screen, WHITE, square_rect, width = 2)
+    def empty_map() -> list:
+        return [[EMPTY for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
 
-scene = Scene_Map()
-scene.call()
+    @staticmethod
+    def display_square(x: int, y: int) -> None:
+        square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+        pygame.draw.rect(screen, WHITE, square_rect, width=2)
+
+
+if __name__ == '__main__':
+    pygame.init()
+
+    #方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
+    screen = pygame.display.set_mode((400,600))
+    pygame.display.set_caption('hello world')
+    clock = pygame.time.Clock()
+    running = True
+
+    scene = SceneMap()
+    scene.call()
