@@ -1,5 +1,6 @@
 import sys
 import pygame
+import copy
 
 class Square:
     def __init__(self, x: int, y: int) -> None:
@@ -32,9 +33,6 @@ FPS = 60
 
 class SceneMap:
     def __init__(self) -> None:
-        #square_map是一个由None和Square组成的二维数组
-        self.square_map = self.empty_map()
-        self.square_map_dropped = self.empty_map()
         self.squares = []
         self.create_square(3, 4)
 
@@ -44,18 +42,7 @@ class SceneMap:
                 if event.type == pygame.QUIT:
                     sys.exit()
 
-            self.square_map_dropped = self.drop_or_land()
-            #若为空数组则表示已着陆，否则返回下降后地图
-
-            if self.square_map_dropped:
-                self.square_map = self.square_map_dropped
-            else:
-                self.create_squareset()
-                squares = self.all_squares_in_map()
-                if self.chonghe(squares):
-                    self.gameover()
-                elif self.manyihang():
-                    self.xiaochu()
+            self.drop_or_land()
 
             screen.fill(BLACK)
             self.display_map()
@@ -63,10 +50,8 @@ class SceneMap:
             clock.tick(FPS)
 
     def display_map(self) -> None:
-        for x in range(MAP_WIDTH):
-            for y in range(MAP_HEIGHT):
-                if self.square_map[y][x]:
-                    self.display_square(x,y)
+        for square in self.squares:
+            self.display_square(square.x, square.y)
 
     def create_squareset(self) -> None:
         pass
@@ -77,53 +62,40 @@ class SceneMap:
     def xiaochu(self) -> None:
         pass
 
-    def drop(self) -> None:
-        pass
-
     def gameover(self) -> None:
         pass
 
-    #根据self.square_map生成一个squares数组
-    def all_squares_in_map(self) -> list:
-        squares = []
-        for x in range(MAP_WIDTH):
-            for y in range(MAP_HEIGHT):
-                if self.square_map[y][x]:
-                    squares.append(self.square_map[y][x])
-        return squares
-
-    def land(self):
-        #将所有squares的dropping设为False,并恢复下降前的squares
+    def land(self) -> None:
+        #将所有squares的dropping设为False
         for square in self.squares:
             square.dropping = False
-        self.squares = self.all_squares_in_map()
+        if self.manyihang():
+            self.xiaochu()
+        self.create_squareset()
+        if self.chonghe(self.squares):
+            self.gameover()
 
-    def drop_or_land(self) -> list:
-        new_map = self.empty_map()
+    def drop_or_land(self) -> str:
+        former_squares = copy.deepcopy(self.squares)
         for square in self.squares:
             if square.dropping:
                 square.drop()
 
-        #返回空数组表示已着陆
         for square in self.squares:
             if square.yuejie():
+                self.squares = former_squares
                 self.land()
-                return []
+                return "land"
 
         if self.chonghe(self.squares):
+            self.squares = former_squares
             self.land()
-            return []
+            return "land"
 
-        for square in self.squares:
-            x = square.x
-            y = square.y
-            new_map[y][x] = square
-
-        return new_map
+        return "drop"
 
     def create_square(self, x: int, y: int) -> None:
         s = Square(x, y)
-        self.square_map[x][y] = s
         self.squares.append(s)
 
     @staticmethod
