@@ -28,11 +28,11 @@ SQUARE_SIZE = 20
 MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 2
-EMPTY = 0
 FPS = 60
 
 class SceneMap:
     def __init__(self) -> None:
+        #square_map是一个由None和Square组成的二维数组
         self.square_map = self.empty_map()
         self.square_map_dropped = self.empty_map()
         self.squares = []
@@ -44,8 +44,8 @@ class SceneMap:
                 if event.type == pygame.QUIT:
                     sys.exit()
 
-            self.square_map_dropped = self.get_dropped()
-            #若为空数组则表示已着陆
+            self.square_map_dropped = self.drop_or_land()
+            #若为空数组则表示已着陆，否则返回下降后地图
 
             if self.square_map_dropped:
                 self.square_map = self.square_map_dropped
@@ -98,7 +98,7 @@ class SceneMap:
             square.dropping = False
         self.squares = self.all_squares_in_map()
 
-    def get_dropped(self) -> list:
+    def drop_or_land(self) -> list:
         new_map = self.empty_map()
         for square in self.squares:
             if square.dropping:
@@ -128,7 +128,7 @@ class SceneMap:
 
     @staticmethod
     def empty_map() -> list:
-        return [[EMPTY for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
+        return [[None for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
 
     @staticmethod
     def display_square(x: int, y: int) -> None:
