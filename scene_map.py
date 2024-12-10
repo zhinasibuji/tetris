@@ -26,98 +26,108 @@ class Square:
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 
+# 方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
 SQUARE_SIZE = 20
 MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 2
-FPS = 5
+FPS = 60
+DIFFICULTY = 30#多少帧下降一次，越大难度越低
 
-class SceneMap:
-    def __init__(self) -> None:
-        self.squares = []
+squares = []
 
-    def call(self) -> None:
-        self.create_squareset()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+def init() -> None:
+    global squares
+    squares = []
+    create_squareset()
 
-            self.drop_or_land()
+def call() -> None:
+    drop_timer = 0
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-            screen.fill(BLACK)
-            self.display_map()
-            pygame.display.flip()
-            clock.tick(FPS)
+        if drop_timer >= DIFFICULTY:
+            drop_or_land()
+            drop_timer = 0
 
-    def display_map(self) -> None:
-        for square in self.squares:
-            self.display_square(square.x, square.y)
+        screen.fill(BLACK)
+        display_map()
+        pygame.display.flip()
+        clock.tick(FPS)
+        drop_timer += 1
 
-    def create_squareset(self) -> None:
-        x = random.randint(0, MAP_WIDTH - 1)
-        self.create_square(x, 0)
+def display_map() -> None:
+    global squares
+    for square in squares:
+        display_square(square.x, square.y)
 
-    def manyihang(self) -> None:
-        pass
+def create_squareset() -> None:
+    x = random.randint(0, MAP_WIDTH - 1)
+    create_square(x, 0)
 
-    def xiaochu(self) -> None:
-        pass
+def manyihang() -> None:
+    pass
 
-    def gameover(self) -> None:
-        pass
+def xiaochu() -> None:
+    pass
 
-    def land(self) -> None:
-        #将所有squares的dropping设为False
-        for square in self.squares:
-            square.dropping = False
-        if self.manyihang():
-            self.xiaochu()
-        self.create_squareset()
-        if self.chonghe(self.squares):
-            self.gameover()
+def gameover() -> None:
+    pass
 
-    def drop_or_land(self) -> str:
-        former_squares = copy.deepcopy(self.squares)
-        for square in self.squares:
-            if square.dropping:
-                square.drop()
+def land() -> None:
+    global squares
+    #将所有squares的dropping设为False
+    for square in squares:
+        square.dropping = False
+    if manyihang():
+        xiaochu()
+    create_squareset()
+    if chonghe():
+        gameover()
 
-        for square in self.squares:
-            if square.yuejie():
-                self.squares = former_squares
-                self.land()
-                return "land"
+def drop_or_land() -> str:
+    global squares
+    former_squares = copy.deepcopy(squares)
+    for square in squares:
+        if square.dropping:
+            square.drop()
 
-        if self.chonghe(self.squares):
-            self.squares = former_squares
-            self.land()
+    for square in squares:
+        if square.yuejie():
+            squares = former_squares
+            land()
             return "land"
 
-        return "drop"
+    if chonghe():
+        squares = former_squares
+        land()
+        return "land"
 
-    def create_square(self, x: int, y: int) -> None:
-        s = Square(x, y)
-        self.squares.append(s)
+    return "drop"
 
-    @staticmethod
-    def display_square(x: int, y: int) -> None:
-        square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-        pygame.draw.rect(screen, WHITE, square_rect, width=2)
+def create_square(x: int, y: int) -> None:
+    global squares
+    s = Square(x, y)
+    squares.append(s)
 
-    @staticmethod
-    def chonghe(squares) -> bool:
-        #set与list长度相等时没有元素重合
-        ls = [(square.x, square.y) for square in squares]
-        return len(ls) != len(set(ls))
+def display_square(x: int, y: int) -> None:
+    square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+    pygame.draw.rect(screen, WHITE, square_rect, width=2)
+
+def chonghe() -> bool:
+    global squares
+    #set与list长度相等时没有元素重合
+    ls = [(square.x, square.y) for square in squares]
+    return len(ls) != len(set(ls))
 
 
 if __name__ == '__main__':
     pygame.init()
 
-    #方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
     screen = pygame.display.set_mode((400,600))
     clock = pygame.time.Clock()
 
-    scene = SceneMap()
-    scene.call()
+    init()
+    call()
