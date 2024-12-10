@@ -9,6 +9,9 @@ class Square:
         self.__x = x
         self.__y = y
 
+    def __str__(self):
+        return str([self.__x, self.__y])
+
     @property
     def x(self) -> int:
         return self.__x
@@ -49,7 +52,7 @@ def init() -> None:
     create_squareset()
 
 def call() -> None:
-    drop_timer = 0
+    drop_timer = 0#计时60帧drop_or_land一次
     while True:
         if drop_timer >= DIFFICULTY:
             drop_or_land()
