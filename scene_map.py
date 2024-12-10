@@ -21,13 +21,15 @@ class Square:
         self.__y += 1
 
     def left(self) -> None:
+        #不重合且不越界才可移动
         self.__x = max(self.__x - 1, 0)
 
     def right(self) -> None:
         self.__x = min(self.__x + 1, MAP_WIDTH - 1)
 
     def yuejie(self) -> bool:
-        return self.__y >= MAP_HEIGHT
+        return self.__y not in range(MAP_HEIGHT) or \
+               self.__x not in range(MAP_WIDTH)
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -84,13 +86,15 @@ def create_squareset() -> None:
     create_square(x, 0)
 
 def manyihang() -> bool:
+    global squares
     ls = [(square.x, square.y) for square in squares]
     for i in range(MAP_WIDTH):
-        if not (i, MAP_HEIGHT - 1) in ls:
+        if  (i, MAP_HEIGHT - 1) not in ls:
             return False
     return True
 
 def xiaochu() -> None:
+    global squares
     #该函数存在bug
     for square in squares:
         if square.y == MAP_HEIGHT - 1:
