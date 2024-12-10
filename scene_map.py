@@ -20,6 +20,12 @@ class Square:
     def drop(self) -> None:
         self.__y += 1
 
+    def left(self) -> None:
+        self.__x = max(self.__x - 1, 0)
+
+    def right(self) -> None:
+        self.__x = min(self.__x + 1, MAP_WIDTH - 1)
+
     def yuejie(self) -> bool:
         return self.__y >= MAP_HEIGHT
 
@@ -32,7 +38,7 @@ MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 2
 FPS = 60
-DIFFICULTY = 30#多少帧下降一次，越大难度越低
+DIFFICULTY = 5#多少帧下降一次，越大难度越低
 
 squares = []
 
@@ -44,24 +50,29 @@ def init() -> None:
 def call() -> None:
     drop_timer = 0
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-
         if drop_timer >= DIFFICULTY:
             drop_or_land()
             drop_timer = 0
-        drop_timer += 1
 
         input_process()
 
         screen.fill(BLACK)
         display_map()
+
         pygame.display.flip()
         clock.tick(FPS)
+        drop_timer += 1
 
 def input_process() -> None:
-    pass
+    global squares
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                [s.left() for s in squares if s.dropping]
+            if event.key == pygame.K_RIGHT:
+                [s.right() for s in squares if s.dropping]
 
 def display_map() -> None:
     global squares
@@ -72,11 +83,18 @@ def create_squareset() -> None:
     x = random.randint(0, MAP_WIDTH - 1)
     create_square(x, 0)
 
-def manyihang() -> None:
-    pass
+def manyihang() -> bool:
+    ls = [(square.x, square.y) for square in squares]
+    for i in range(MAP_WIDTH):
+        if not (i, MAP_HEIGHT - 1) in ls:
+            return False
+    return True
 
 def xiaochu() -> None:
-    pass
+    #该函数存在bug
+    for square in squares:
+        if square.y == MAP_HEIGHT - 1:
+            squares.remove(square)
 
 def gameover() -> None:
     pass
@@ -86,31 +104,25 @@ def land() -> None:
     #将所有squares的dropping设为False
     for square in squares:
         square.dropping = False
-    if manyihang():
+    while manyihang():
         xiaochu()
     create_squareset()
     if chonghe():
         gameover()
 
-def drop_or_land() -> str:
+def drop_or_land() -> None:
     global squares
     former_squares = copy.deepcopy(squares)
-    for square in squares:
-        if square.dropping:
-            square.drop()
+    [s.drop() for s in squares if s.dropping]
 
     for square in squares:
         if square.yuejie():
             squares = former_squares
             land()
-            return "land"
 
     if chonghe():
         squares = former_squares
         land()
-        return "land"
-
-    return "drop"
 
 def create_square(x: int, y: int) -> None:
     global squares
