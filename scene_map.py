@@ -51,12 +51,17 @@ def call() -> None:
         if drop_timer >= DIFFICULTY:
             drop_or_land()
             drop_timer = 0
+        drop_timer += 1
+
+        input_process()
 
         screen.fill(BLACK)
         display_map()
         pygame.display.flip()
         clock.tick(FPS)
-        drop_timer += 1
+
+def input_process() -> None:
+    pass
 
 def display_map() -> None:
     global squares
