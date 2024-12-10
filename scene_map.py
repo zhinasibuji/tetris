@@ -73,16 +73,16 @@ def input_process() -> None:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            keyboard_process(event)
+            keyboard_process(event.key)
 
-def keyboard_process(event) -> None:
+def keyboard_process(key) -> None:
     global squares
-    if event.key == pygame.K_LEFT:
+    if key == pygame.K_LEFT:
         former_squares = copy.deepcopy(squares)
         [s.left() for s in squares if s.dropping]
         if yuejie_or_chonghe():
             squares = former_squares
-    elif event.key == pygame.K_RIGHT:
+    elif key == pygame.K_RIGHT:
         former_squares = copy.deepcopy(squares)
         [s.right() for s in squares if s.dropping]
         if yuejie_or_chonghe():
@@ -125,14 +125,8 @@ def land() -> None:
         gameover()
 
 def yuejie_or_chonghe() -> bool:
-    for square in squares:
-        if square.yuejie():
-            return True
+    return any([s.yuejie() for s in squares]) or chonghe()
 
-    if chonghe():
-        return True
-
-    return False
 
 def drop_or_land() -> None:
     global squares
