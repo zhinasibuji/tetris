@@ -21,19 +21,10 @@ class Square:
         self.__y += 1
 
     def left(self) -> None:
-        global squares
-        #不重合且不越界才可移动
-        for square in squares:
-            if square.x == self.__x - 1:
-                return
-        self.__x = max(self.__x - 1, 0)
+        self.__x -= 1
 
     def right(self) -> None:
-        global squares
-        for square in squares:
-            if square.x == self.__x + 1:
-                return
-        self.__x = min(self.__x + 1, MAP_WIDTH - 1)
+        self.__x += 1
 
     def yuejie(self) -> bool:
         return self.__y not in range(MAP_HEIGHT) or \
@@ -54,7 +45,7 @@ squares = []
 
 def init() -> None:
     global squares
-    squares = []
+    squares.clear()
     create_squareset()
 
 def call() -> None:
@@ -79,10 +70,20 @@ def input_process() -> None:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                [s.left() for s in squares if s.dropping]
-            if event.key == pygame.K_RIGHT:
-                [s.right() for s in squares if s.dropping]
+            keyboard_process(event)
+
+def keyboard_process(event) -> None:
+    global squares
+    if event.key == pygame.K_LEFT:
+        former_squares = copy.deepcopy(squares)
+        [s.left() for s in squares if s.dropping]
+        if yuejie_or_chonghe():
+            squares = former_squares
+    elif event.key == pygame.K_RIGHT:
+        former_squares = copy.deepcopy(squares)
+        [s.right() for s in squares if s.dropping]
+        if yuejie_or_chonghe():
+            squares = former_squares
 
 def display_map() -> None:
     global squares
@@ -104,7 +105,6 @@ def manyihang() -> bool:
 def xiaochu() -> None:
     global squares
     squares = [s for s in squares if s.y != MAP_HEIGHT - 1]
-    #全体方块drop
     [s.drop() for s in squares]
 
 def gameover() -> None:
@@ -121,17 +121,22 @@ def land() -> None:
     if chonghe():
         gameover()
 
+def yuejie_or_chonghe() -> bool:
+    for square in squares:
+        if square.yuejie():
+            return True
+
+    if chonghe():
+        return True
+
+    return False
+
 def drop_or_land() -> None:
     global squares
     former_squares = copy.deepcopy(squares)
     [s.drop() for s in squares if s.dropping]
 
-    for square in squares:
-        if square.yuejie():
-            squares = former_squares
-            land()
-
-    if chonghe():
+    if yuejie_or_chonghe():
         squares = former_squares
         land()
 
