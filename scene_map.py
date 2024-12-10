@@ -95,10 +95,9 @@ def manyihang() -> bool:
 
 def xiaochu() -> None:
     global squares
-    #该函数存在bug
-    for square in squares:
-        if square.y == MAP_HEIGHT - 1:
-            squares.remove(square)
+    squares = [s for s in squares if s.y != MAP_HEIGHT - 1]
+    #全体方块drop
+    [s.drop() for s in squares]
 
 def gameover() -> None:
     pass
