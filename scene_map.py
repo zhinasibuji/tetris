@@ -21,10 +21,18 @@ class Square:
         self.__y += 1
 
     def left(self) -> None:
+        global squares
         #不重合且不越界才可移动
+        for square in squares:
+            if square.x == self.__x - 1:
+                return
         self.__x = max(self.__x - 1, 0)
 
     def right(self) -> None:
+        global squares
+        for square in squares:
+            if square.x == self.__x + 1:
+                return
         self.__x = min(self.__x + 1, MAP_WIDTH - 1)
 
     def yuejie(self) -> bool:
@@ -100,7 +108,7 @@ def xiaochu() -> None:
     [s.drop() for s in squares]
 
 def gameover() -> None:
-    pass
+     sys.exit()
 
 def land() -> None:
     global squares
