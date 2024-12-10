@@ -52,11 +52,11 @@ def init() -> None:
     create_squareset()
 
 def call() -> None:
-    drop_timer = 0#计时60帧drop_or_land一次
+    frame_count = 0#计时每60帧drop_or_land一次
     while True:
-        if drop_timer >= DIFFICULTY:
+        if frame_count >= DIFFICULTY:
             drop_or_land()
-            drop_timer = 0
+            frame_count = 0
 
         input_process()
 
@@ -65,7 +65,7 @@ def call() -> None:
 
         pygame.display.flip()
         clock.tick(FPS)
-        drop_timer += 1
+        frame_count += 1
 
 def input_process() -> None:
     global squares
