@@ -6,24 +6,32 @@ import random
 class Square:
     def __init__(self, x: int, y: int) -> None:
         self.dropping = True
-        self.x = x
-        self.y = y
+        self.__x = x
+        self.__y = y
 
-    def __str__(self) -> str:
-        return str([self.x, self.y])
+    def __str__(self):
+        return str([self.__x, self.__y])
+
+    @property
+    def x(self) -> int:
+        return self.__x
+
+    @property
+    def y(self) -> int:
+        return self.__y
 
     def drop(self) -> None:
-        self.y += 1
+        self.__y += 1
 
     def left(self) -> None:
-        self.x -= 1
+        self.__x -= 1
 
     def right(self) -> None:
-        self.x += 1
+        self.__x += 1
 
     def yuejie(self) -> bool:
-        return self.y not in range(MAP_HEIGHT) or \
-               self.x not in range(MAP_WIDTH)
+        return self.__y not in range(MAP_HEIGHT) or \
+               self.__x not in range(MAP_WIDTH)
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -49,7 +57,6 @@ def call() -> None:
         if frame_count >= DIFFICULTY:
             drop_or_land()
             frame_count = 0
-        frame_count += 1
 
         input_process()
 
@@ -58,6 +65,7 @@ def call() -> None:
 
         pygame.display.flip()
         clock.tick(FPS)
+        frame_count += 1
 
 def input_process() -> None:
     global squares
