@@ -139,7 +139,7 @@ class SceneMap:
             if yuejie_or_chonghe(self.squares):
                 self.squares = former_squares
             else:
-                self.squareset_pos[1] += 1
+                self.squareset_pos[0] += 1
         elif key == pygame.K_SPACE:
             self.spin()
 
