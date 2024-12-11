@@ -2,6 +2,7 @@ import sys
 import pygame
 import copy
 import random
+import numpy as np
 
 class Square:
     def __init__(self, x: int, y: int) -> None:
@@ -9,7 +10,7 @@ class Square:
         self.x = x
         self.y = y
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str([self.x, self.y])
 
     def drop(self) -> None:
@@ -35,7 +36,42 @@ MAP_WIDTH = 20
 LINE_THICKNESS = 2
 FPS = 60
 DIFFICULTY = 5#多少帧下降一次，越大难度越低
-SHAPES = ['I', 'O', 'J', 'L', 'T']
+ARRAY_I = np.array(
+    [[0, 0, 1, 0],
+     [0, 0, 1, 0],
+     [0, 0, 1, 0],
+     [0, 0, 1, 0]]
+)
+ARRAY_O = np.array(
+    [[1, 1],
+     [1, 1]]
+)
+ARRAY_J = np.array(
+    [[0, 0, 1],
+     [0, 0, 1],
+     [0, 1, 1]]
+)
+ARRAY_L = np.array(
+    [[1, 0, 0],
+     [1, 0, 0],
+     [1, 1, 0]]
+)
+ARRAY_T = np.array(
+    [[1, 1, 1],
+     [0, 1, 0],
+     [0, 0, 0]]
+)
+ARRAYS = [ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T]
+
+#positions根据array和pos返回所有square的坐标
+def positions(array, pos) -> list:
+    max_x, max_y = array.shape
+    ls = []
+    for x in range(max_x):
+        for y in range(max_y):
+            if array[y][x]:
+                ls.append((x + pos[0], y + pos[1]))
+    return ls
 
 def display_square(x: int, y: int) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
@@ -63,6 +99,8 @@ class SceneMap:
     def __init__(self) -> None:
         self.squares = []
         self.create_squareset()
+        self.squareset_array = np.array([])
+        self.squareset_pos = [0, 0]
 
     def call(self) -> None:
         frame_count = 0#计时每60帧drop_or_land一次
@@ -93,16 +131,31 @@ class SceneMap:
             [s.left() for s in self.squares if s.dropping]
             if yuejie_or_chonghe(self.squares):
                 self.squares = former_squares
+            else:
+                self.squareset_pos[0] -= 1
         elif key == pygame.K_RIGHT:
             former_squares = copy.deepcopy(self.squares)
             [s.right() for s in self.squares if s.dropping]
             if yuejie_or_chonghe(self.squares):
                 self.squares = former_squares
+            else:
+                self.squareset_pos[1] += 1
+        elif key == pygame.K_SPACE:
+            self.spin()
+
+    def spin(self):
+        self.squareset_array = np.rot90(self.squareset_array)
+        #清除所有dropping_squares,根据array和pos重写之
 
     def create_squareset(self) -> None:
         #随机位置，随机形状
-        x = random.randint(0, MAP_WIDTH - 1)
-        self.create_square(x, 0)
+        self.squareset_array = random.choice(ARRAYS)
+        array_width = self.squareset_array.shape[0]
+        x = random.randint(0, MAP_WIDTH - array_width)
+        self.squareset_pos = [x, 0]
+        positions_list = positions(self.squareset_array,self.squareset_pos)
+        for position in positions_list:
+            self.create_square(position[0], position[1])
 
     def xiaochu(self) -> None:
         self.squares = [s for s in self.squares if s.y != MAP_HEIGHT - 1]
@@ -125,6 +178,8 @@ class SceneMap:
         if yuejie_or_chonghe(self.squares):
             self.squares = former_squares
             self.land()
+        else:
+            self.squareset_pos[1] += 1
 
     def create_square(self, x: int, y: int) -> None:
         s = Square(x, y)
