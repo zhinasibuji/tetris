@@ -37,7 +37,13 @@ FPS = 60
 DIFFICULTY = 5#多少帧下降一次，越大难度越低
 SHAPES = ['I', 'O', 'J', 'L', 'T']
 
-g_squares = []
+def display_square(x: int, y: int) -> None:
+    square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+    pygame.draw.rect(screen, WHITE, square_rect, width=2)
+
+def manyihang(squares) -> bool:
+    ls = [s for s in squares if s.y == MAP_HEIGHT - 1]
+    return len(ls) == MAP_WIDTH
 
 def chonghe(squares) -> bool:
     ls = [(square.x, square.y) for square in squares]
@@ -50,92 +56,80 @@ def display_map(squares) -> None:
     for square in squares:
         display_square(square.x, square.y)
 
-def init() -> None:
-    global g_squares
-    g_squares.clear()
-    create_squareset()
-
-def call() -> None:
-    frame_count = 0#计时每60帧drop_or_land一次
-    while True:
-        if frame_count >= DIFFICULTY:
-            drop_or_land()
-            frame_count = 0
-
-        input_process()
-
-        screen.fill(BLACK)
-        display_map(g_squares)
-
-        pygame.display.flip()
-        clock.tick(FPS)
-        frame_count += 1
-
-def input_process() -> None:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            keyboard_process(event.key)
-
-def keyboard_process(key) -> None:
-    global g_squares
-    if key == pygame.K_LEFT:
-        former_squares = copy.deepcopy(g_squares)
-        [s.left() for s in g_squares if s.dropping]
-        if yuejie_or_chonghe(g_squares):
-            g_squares = former_squares
-    elif key == pygame.K_RIGHT:
-        former_squares = copy.deepcopy(g_squares)
-        [s.right() for s in g_squares if s.dropping]
-        if yuejie_or_chonghe(g_squares):
-            g_squares = former_squares
-
-def create_squareset() -> None:
-    #随机位置，随机形状
-    x = random.randint(0, MAP_WIDTH - 1)
-    create_square(x, 0)
-
-def manyihang(squares) -> bool:
-    ls = [s for s in squares if s.y == MAP_HEIGHT - 1]
-    return len(ls) == MAP_WIDTH
-
-def xiaochu() -> None:
-    global g_squares
-    g_squares = [s for s in g_squares if s.y != MAP_HEIGHT - 1]
-    [s.drop() for s in g_squares]
-
 def gameover() -> None:
      sys.exit()
 
-def land() -> None:
-    global g_squares
-    #将所有squares的dropping设为False
-    for square in g_squares:
-        square.dropping = False
-    while manyihang(g_squares):
-        xiaochu()
-    create_squareset()
-    if chonghe(g_squares):
-        gameover()
+class SceneMap:
+    def __init__(self) -> None:
+        self.squares = []
+        self.create_squareset()
 
-def drop_or_land() -> None:
-    global g_squares
-    former_squares = copy.deepcopy(g_squares)
-    [s.drop() for s in g_squares if s.dropping]
+    def call(self) -> None:
+        frame_count = 0#计时每60帧drop_or_land一次
+        while True:
+            if frame_count >= DIFFICULTY:
+                self.drop_or_land()
+                frame_count = 0
 
-    if yuejie_or_chonghe(g_squares):
-        g_squares = former_squares
-        land()
+            self.input_process()
 
-def create_square(x: int, y: int) -> None:
-    global g_squares
-    s = Square(x, y)
-    g_squares.append(s)
+            screen.fill(BLACK)
+            display_map(self.squares)
 
-def display_square(x: int, y: int) -> None:
-    square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-    pygame.draw.rect(screen, WHITE, square_rect, width=2)
+            pygame.display.flip()
+            clock.tick(FPS)
+            frame_count += 1
+
+    def input_process(self) -> None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self.keyboard_process(event.key)
+
+    def keyboard_process(self, key) -> None:
+        if key == pygame.K_LEFT:
+            former_squares = copy.deepcopy(self.squares)
+            [s.left() for s in self.squares if s.dropping]
+            if yuejie_or_chonghe(self.squares):
+                self.squares = former_squares
+        elif key == pygame.K_RIGHT:
+            former_squares = copy.deepcopy(self.squares)
+            [s.right() for s in self.squares if s.dropping]
+            if yuejie_or_chonghe(self.squares):
+                self.squares = former_squares
+
+    def create_squareset(self) -> None:
+        #随机位置，随机形状
+        x = random.randint(0, MAP_WIDTH - 1)
+        self.create_square(x, 0)
+
+    def xiaochu(self) -> None:
+        self.squares = [s for s in self.squares if s.y != MAP_HEIGHT - 1]
+        [s.drop() for s in self.squares]
+
+    def land(self) -> None:
+        #将所有squares的dropping设为False
+        for square in self.squares:
+            square.dropping = False
+        while manyihang(self.squares):
+            self.xiaochu()
+        self.create_squareset()
+        if chonghe(self.squares):
+            gameover()
+
+    def drop_or_land(self) -> None:
+        former_squares = copy.deepcopy(self.squares)
+        [s.drop() for s in self.squares if s.dropping]
+
+        if yuejie_or_chonghe(self.squares):
+            self.squares = former_squares
+            self.land()
+
+    def create_square(self, x: int, y: int) -> None:
+        s = Square(x, y)
+        self.squares.append(s)
+
 
 
 if __name__ == '__main__':
@@ -144,5 +138,5 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((400,600))
     clock = pygame.time.Clock()
 
-    init()
-    call()
+    scene = SceneMap()
+    scene.call()
