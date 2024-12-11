@@ -6,32 +6,24 @@ import random
 class Square:
     def __init__(self, x: int, y: int) -> None:
         self.dropping = True
-        self.__x = x
-        self.__y = y
+        self.x = x
+        self.y = y
 
     def __str__(self):
-        return str([self.__x, self.__y])
-
-    @property
-    def x(self) -> int:
-        return self.__x
-
-    @property
-    def y(self) -> int:
-        return self.__y
+        return str([self.x, self.y])
 
     def drop(self) -> None:
-        self.__y += 1
+        self.y += 1
 
     def left(self) -> None:
-        self.__x -= 1
+        self.x -= 1
 
     def right(self) -> None:
-        self.__x += 1
+        self.x += 1
 
     def yuejie(self) -> bool:
-        return self.__y not in range(MAP_HEIGHT) or \
-               self.__x not in range(MAP_WIDTH)
+        return self.y not in range(MAP_HEIGHT) or \
+               self.x not in range(MAP_WIDTH)
 
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -44,11 +36,11 @@ LINE_THICKNESS = 2
 FPS = 60
 DIFFICULTY = 5#多少帧下降一次，越大难度越低
 
-squares = []
+g_squares = []
 
 def init() -> None:
-    global squares
-    squares.clear()
+    global g_squares
+    g_squares.clear()
     create_squareset()
 
 def call() -> None:
@@ -61,14 +53,13 @@ def call() -> None:
         input_process()
 
         screen.fill(BLACK)
-        display_map()
+        display_map(g_squares)
 
         pygame.display.flip()
         clock.tick(FPS)
         frame_count += 1
 
 def input_process() -> None:
-    global squares
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -76,20 +67,19 @@ def input_process() -> None:
             keyboard_process(event.key)
 
 def keyboard_process(key) -> None:
-    global squares
+    global g_squares
     if key == pygame.K_LEFT:
-        former_squares = copy.deepcopy(squares)
-        [s.left() for s in squares if s.dropping]
-        if yuejie_or_chonghe():
-            squares = former_squares
+        former_squares = copy.deepcopy(g_squares)
+        [s.left() for s in g_squares if s.dropping]
+        if yuejie_or_chonghe(g_squares):
+            g_squares = former_squares
     elif key == pygame.K_RIGHT:
-        former_squares = copy.deepcopy(squares)
-        [s.right() for s in squares if s.dropping]
-        if yuejie_or_chonghe():
-            squares = former_squares
+        former_squares = copy.deepcopy(g_squares)
+        [s.right() for s in g_squares if s.dropping]
+        if yuejie_or_chonghe(g_squares):
+            g_squares = former_squares
 
-def display_map() -> None:
-    global squares
+def display_map(squares) -> None:
     for square in squares:
         display_square(square.x, square.y)
 
@@ -97,8 +87,7 @@ def create_squareset() -> None:
     x = random.randint(0, MAP_WIDTH - 1)
     create_square(x, 0)
 
-def manyihang() -> bool:
-    global squares
+def manyihang(squares) -> bool:
     ls = [(square.x, square.y) for square in squares]
     for i in range(MAP_WIDTH):
         if  (i, MAP_HEIGHT - 1) not in ls:
@@ -106,49 +95,47 @@ def manyihang() -> bool:
     return True
 
 def xiaochu() -> None:
-    global squares
-    squares = [s for s in squares if s.y != MAP_HEIGHT - 1]
-    [s.drop() for s in squares]
+    global g_squares
+    g_squares = [s for s in g_squares if s.y != MAP_HEIGHT - 1]
+    [s.drop() for s in g_squares]
 
 def gameover() -> None:
      sys.exit()
 
 def land() -> None:
-    global squares
+    global g_squares
     #将所有squares的dropping设为False
-    for square in squares:
+    for square in g_squares:
         square.dropping = False
-    while manyihang():
+    while manyihang(g_squares):
         xiaochu()
     create_squareset()
-    if chonghe():
+    if chonghe(g_squares):
         gameover()
 
-def yuejie_or_chonghe() -> bool:
-    return any([s.yuejie() for s in squares]) or chonghe()
+def yuejie_or_chonghe(squares) -> bool:
+    return any([s.yuejie() for s in squares]) or chonghe(squares)
 
 
 def drop_or_land() -> None:
-    global squares
-    former_squares = copy.deepcopy(squares)
-    [s.drop() for s in squares if s.dropping]
+    global g_squares
+    former_squares = copy.deepcopy(g_squares)
+    [s.drop() for s in g_squares if s.dropping]
 
-    if yuejie_or_chonghe():
-        squares = former_squares
+    if yuejie_or_chonghe(g_squares):
+        g_squares = former_squares
         land()
 
 def create_square(x: int, y: int) -> None:
-    global squares
+    global g_squares
     s = Square(x, y)
-    squares.append(s)
+    g_squares.append(s)
 
 def display_square(x: int, y: int) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
     pygame.draw.rect(screen, WHITE, square_rect, width=2)
 
-def chonghe() -> bool:
-    global squares
-    #set与list长度相等时没有元素重合
+def chonghe(squares) -> bool:
     ls = [(square.x, square.y) for square in squares]
     return len(ls) != len(set(ls))
 
