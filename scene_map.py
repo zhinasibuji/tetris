@@ -35,8 +35,20 @@ MAP_WIDTH = 20
 LINE_THICKNESS = 2
 FPS = 60
 DIFFICULTY = 5#多少帧下降一次，越大难度越低
+SHAPES = ['I', 'O', 'J', 'L', 'T']
 
 g_squares = []
+
+def chonghe(squares) -> bool:
+    ls = [(square.x, square.y) for square in squares]
+    return len(ls) != len(set(ls))
+
+def yuejie_or_chonghe(squares) -> bool:
+    return any([s.yuejie() for s in squares]) or chonghe(squares)
+
+def display_map(squares) -> None:
+    for square in squares:
+        display_square(square.x, square.y)
 
 def init() -> None:
     global g_squares
@@ -79,20 +91,14 @@ def keyboard_process(key) -> None:
         if yuejie_or_chonghe(g_squares):
             g_squares = former_squares
 
-def display_map(squares) -> None:
-    for square in squares:
-        display_square(square.x, square.y)
-
 def create_squareset() -> None:
+    #随机位置，随机形状
     x = random.randint(0, MAP_WIDTH - 1)
     create_square(x, 0)
 
 def manyihang(squares) -> bool:
-    ls = [(square.x, square.y) for square in squares]
-    for i in range(MAP_WIDTH):
-        if  (i, MAP_HEIGHT - 1) not in ls:
-            return False
-    return True
+    ls = [s for s in squares if s.y == MAP_HEIGHT - 1]
+    return len(ls) == MAP_WIDTH
 
 def xiaochu() -> None:
     global g_squares
@@ -113,10 +119,6 @@ def land() -> None:
     if chonghe(g_squares):
         gameover()
 
-def yuejie_or_chonghe(squares) -> bool:
-    return any([s.yuejie() for s in squares]) or chonghe(squares)
-
-
 def drop_or_land() -> None:
     global g_squares
     former_squares = copy.deepcopy(g_squares)
@@ -134,10 +136,6 @@ def create_square(x: int, y: int) -> None:
 def display_square(x: int, y: int) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
     pygame.draw.rect(screen, WHITE, square_rect, width=2)
-
-def chonghe(squares) -> bool:
-    ls = [(square.x, square.y) for square in squares]
-    return len(ls) != len(set(ls))
 
 
 if __name__ == '__main__':
