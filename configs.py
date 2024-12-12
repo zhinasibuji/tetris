@@ -1,0 +1,10 @@
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+
+# 方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
+SQUARE_SIZE = 20
+MAP_HEIGHT = 30
+MAP_WIDTH = 20
+LINE_THICKNESS = 2
+FPS = 60
+DIFFICULTY = 5#多少帧下降一次，越大难度越低

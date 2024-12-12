@@ -3,39 +3,8 @@ import pygame
 import copy
 import random
 import numpy as np
+from configs import *
 
-class Square:
-    def __init__(self, x: int, y: int) -> None:
-        self.dropping = True
-        self.x = x
-        self.y = y
-
-    def __str__(self) -> str:
-        return str([self.x, self.y])
-
-    def drop(self) -> None:
-        self.y += 1
-
-    def left(self) -> None:
-        self.x -= 1
-
-    def right(self) -> None:
-        self.x += 1
-
-    def yuejie(self) -> bool:
-        return self.y not in range(MAP_HEIGHT) or \
-               self.x not in range(MAP_WIDTH)
-
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-
-# 方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
-SQUARE_SIZE = 20
-MAP_HEIGHT = 30
-MAP_WIDTH = 20
-LINE_THICKNESS = 2
-FPS = 60
-DIFFICULTY = 5#多少帧下降一次，越大难度越低
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
      [0, 0, 1, 0],
@@ -62,6 +31,28 @@ ARRAY_T = np.array(
      [0, 0, 0]]
 )
 ARRAYS = [ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T]
+
+class Square:
+    def __init__(self, x: int, y: int) -> None:
+        self.dropping = True
+        self.x = x
+        self.y = y
+
+    def __str__(self) -> str:
+        return str([self.x, self.y])
+
+    def drop(self) -> None:
+        self.y += 1
+
+    def left(self) -> None:
+        self.x -= 1
+
+    def right(self) -> None:
+        self.x += 1
+
+    def yuejie(self) -> bool:
+        return self.y not in range(MAP_HEIGHT) or \
+               self.x not in range(MAP_WIDTH)
 
 #positions根据array和pos返回所有square的坐标
 def positions(array, pos) -> list:
@@ -109,6 +100,7 @@ class SceneMap:
             if frame_count >= DIFFICULTY:
                 self.drop_or_land()
                 frame_count = 0
+            frame_count += 1
 
             self.input_process()
 
@@ -117,7 +109,6 @@ class SceneMap:
 
             pygame.display.flip()
             clock.tick(FPS)
-            frame_count += 1
 
     def input_process(self) -> None:
         for event in pygame.event.get():
