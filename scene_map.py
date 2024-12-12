@@ -143,7 +143,7 @@ class SceneMap:
     def spin(self):
         self.squareset_array = np.rot90(self.squareset_array)
         #清除所有dropping_squares,根据array和pos重写之
-        self.squares = [s for s in self.squares if s.dropping]
+        self.squares = [s for s in self.squares if not s.dropping]
 
         positions_list = positions(self.squareset_array,self.squareset_pos)
         for position in positions_list:
