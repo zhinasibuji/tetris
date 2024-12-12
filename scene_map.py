@@ -98,9 +98,9 @@ def gameover() -> None:
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
-        self.create_squareset()
         self.squareset_array = np.array([])
         self.squareset_pos = [0, 0]
+        self.create_squareset()
 
     def call(self) -> None:
         frame_count = 0#计时每60帧drop_or_land一次
