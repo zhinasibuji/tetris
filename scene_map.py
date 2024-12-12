@@ -100,10 +100,11 @@ class SceneMap:
         self.squares = []
         self.squareset_array = np.array([])
         self.squareset_pos = [0, 0]
-        self.create_squareset()
 
     def call(self) -> None:
+        self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
+        
         while True:
             if frame_count >= DIFFICULTY:
                 self.drop_or_land()
