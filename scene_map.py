@@ -126,26 +126,28 @@ class SceneMap:
                 self.keyboard_process(event.key)
 
     def keyboard_process(self, key) -> None:
+        former = (copy.deepcopy(self.squares), self.squareset_pos)
+
         if key == pygame.K_LEFT:
-            former_squares = copy.deepcopy(self.squares)
             [s.left() for s in self.squares if s.dropping]
-            if yuejie_or_chonghe(self.squares):
-                self.squares = former_squares
-            else:
-                self.squareset_pos[0] -= 1
+            self.squareset_pos[0] -= 1
         elif key == pygame.K_RIGHT:
-            former_squares = copy.deepcopy(self.squares)
             [s.right() for s in self.squares if s.dropping]
-            if yuejie_or_chonghe(self.squares):
-                self.squares = former_squares
-            else:
-                self.squareset_pos[0] += 1
+            self.squareset_pos[0] += 1
         elif key == pygame.K_SPACE:
             self.spin()
+
+        if yuejie_or_chonghe(self.squares):
+            self.squares, self.squareset_pos = former
 
     def spin(self):
         self.squareset_array = np.rot90(self.squareset_array)
         #清除所有dropping_squares,根据array和pos重写之
+        self.squares = [s for s in self.squares if s.dropping]
+
+        positions_list = positions(self.squareset_array,self.squareset_pos)
+        for position in positions_list:
+            self.create_square(position[0], position[1])
 
     def create_squareset(self) -> None:
         #随机位置，随机形状
@@ -153,6 +155,7 @@ class SceneMap:
         array_width = self.squareset_array.shape[0]
         x = random.randint(0, MAP_WIDTH - array_width)
         self.squareset_pos = [x, 0]
+
         positions_list = positions(self.squareset_array,self.squareset_pos)
         for position in positions_list:
             self.create_square(position[0], position[1])
