@@ -1,3 +1,4 @@
+.venv
 .idea
 src/test.py
-__pychache__
+__pychache__!/.venv/
