@@ -94,12 +94,13 @@ class SceneMap:
         frame_count = 0#计时每60帧drop_or_land一次
         
         while not self.next_scene:
+
+            self.input_process()
+
             if frame_count >= DIFFICULTY:
                 self.drop_or_land()
                 frame_count = 0
             frame_count += 1
-
-            self.input_process()
 
             screen.fill(BLACK)
             display_map(self.squares)
