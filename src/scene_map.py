@@ -2,7 +2,7 @@ import sys
 import copy
 import random
 import numpy as np
-from src.configs import *
+from configs import *
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],

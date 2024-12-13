@@ -1,5 +1,5 @@
 import sys
-from src.configs import *
+from configs import *
 
 def draw_text(center_x: int, center_y: int, text: str, big: bool, chosen=False) -> None:
     if big:
