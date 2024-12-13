@@ -1,8 +1,11 @@
 import sys
 from configs import *
 
-def draw_text(center_x: int, center_y: int, text: str, size: int, chosen=False) -> None:
-    font = pygame.font.Font('font.otf', size)
+def draw_text(center_x: int, center_y: int, text: str, big: bool, chosen=False) -> None:
+    if big:
+        font = big_font
+    else:
+        font = small_font
     if chosen:
         surf = font.render(text, True, BLACK, WHITE)
     else:
@@ -50,18 +53,18 @@ class SceneGameover:
         #x居中，y约为四分之一窗口高
         x = SCREEN_WIDTH / 2
         y = SCREEN_HEIGHT / 4
-        draw_text(x, y, "游戏失败", 64)
+        draw_text(x, y, "游戏失败", True)
 
     def draw_choices(self):
         x1 = x2 = SCREEN_WIDTH / 2
         y1 = SCREEN_HEIGHT * (5/8)
         y2 = SCREEN_HEIGHT * (6/8)
         if self.choice == 0:
-            draw_text(x1, y1, "再来一次", 32, chosen=True)
-            draw_text(x2, y2, "退出游戏", 32,)
+            draw_text(x1, y1, "再来一次", False, chosen=True)
+            draw_text(x2, y2, "退出游戏", False)
         elif self.choice == 1:
-            draw_text(x1, y1, "再来一次", 32)
-            draw_text(x2, y2, "退出游戏", 32, chosen=True)
+            draw_text(x1, y1, "再来一次", False)
+            draw_text(x2, y2, "退出游戏", False, chosen=True)
 
 
 if __name__ == '__main__':

@@ -16,3 +16,5 @@ SCREEN_HEIGHT = 600
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
+big_font = pygame.font.Font('font.otf', 64)
+small_font = pygame.font.Font('font.otf', 32)
