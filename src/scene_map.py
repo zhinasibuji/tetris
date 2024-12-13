@@ -130,6 +130,7 @@ class SceneMap:
                 [s.drop() for s in self.squares if s.dropping]
                 self.squareset_pos[1] += 1
             self.squares, self.squareset_pos = former
+            self.land()
             return
         elif key == pygame.K_SPACE:
             self.spin()
