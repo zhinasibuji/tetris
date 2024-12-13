@@ -67,10 +67,6 @@ def display_square(x: int, y: int) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
     pygame.draw.rect(screen, WHITE, square_rect, width=2)
 
-def manyihang(squares) -> bool:
-    ls = [s for s in squares if s.y == MAP_HEIGHT - 1]
-    return len(ls) == MAP_WIDTH
-
 def chonghe(squares) -> bool:
     ls = [(square.x, square.y) for square in squares]
     return len(ls) != len(set(ls))
@@ -158,16 +154,21 @@ class SceneMap:
         for position in positions_list:
             self.create_square(position[0], position[1])
 
-    def xiaochu(self) -> None:
-        self.squares = [s for s in self.squares if s.y != MAP_HEIGHT - 1]
-        [s.drop() for s in self.squares]
+    def xiaochu_benhang(self, line: int) -> None:
+        self.squares = [s for s in self.squares if s.y != line]
+        [s.drop() for s in self.squares if s.y < line]
+
+    def xiaochu_manhang(self) -> None:
+        for line in range(MAP_HEIGHT):
+            ls = [s for s in self.squares if s.y == line]
+            if len(ls) == MAP_WIDTH:
+                self.xiaochu_benhang(line)
 
     def land(self) -> None:
         #将所有squares的dropping设为False
         for square in self.squares:
             square.dropping = False
-        while manyihang(self.squares):
-            self.xiaochu()
+        self.xiaochu_manhang()
         self.create_squareset()
         if chonghe(self.squares):
             self.gameover()
