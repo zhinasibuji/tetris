@@ -1,5 +1,4 @@
 import sys
-import pygame
 import copy
 import random
 import numpy as np
@@ -89,6 +88,7 @@ def gameover() -> None:
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
+        self.next_scene = ""
         self.squareset_array = np.array([])
         self.squareset_pos = [0, 0]
 
@@ -126,6 +126,13 @@ class SceneMap:
         elif key == pygame.K_RIGHT:
             [s.right() for s in self.squares if s.dropping]
             self.squareset_pos[0] += 1
+        elif key == pygame.K_DOWN:
+            while not yuejie_or_chonghe(self.squares):
+                former = (copy.deepcopy(self.squares), self.squareset_pos)
+                [s.drop() for s in self.squares if s.dropping]
+                self.squareset_pos[1] += 1
+            self.squares, self.squareset_pos = former
+            return
         elif key == pygame.K_SPACE:
             self.spin()
 
@@ -164,7 +171,10 @@ class SceneMap:
             self.xiaochu()
         self.create_squareset()
         if chonghe(self.squares):
-            gameover()
+            self.gameover()
+
+    def gameover(self):
+        self.next_scene = "scene_gameover"
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
@@ -183,10 +193,5 @@ class SceneMap:
 
 
 if __name__ == '__main__':
-    pygame.init()
-
-    screen = pygame.display.set_mode((400,600))
-    clock = pygame.time.Clock()
-
     scene = SceneMap()
     scene.call()
