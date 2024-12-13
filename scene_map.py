@@ -82,9 +82,6 @@ def display_map(squares) -> None:
     for square in squares:
         display_square(square.x, square.y)
 
-def gameover() -> None:
-     sys.exit()
-
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
@@ -96,7 +93,7 @@ class SceneMap:
         self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
         
-        while True:
+        while not self.next_scene:
             if frame_count >= DIFFICULTY:
                 self.drop_or_land()
                 frame_count = 0
