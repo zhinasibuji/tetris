@@ -17,6 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 fonts = pygame.font.get_fonts()
+
 if 'simhei' in fonts:
     big_font = pygame.font.SysFont('simhei', 64)
     small_font = pygame.font.SysFont('simhei', 32)
