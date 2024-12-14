@@ -89,7 +89,7 @@ class SceneMap:
         self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
         
-        while not self.next_scene:
+        while self.next_scene == "":
 
             self.input_process()
 

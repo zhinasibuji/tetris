@@ -20,7 +20,7 @@ class SceneTitle:
         self.next_scene = ""
 
     def call(self):
-        while not self.next_scene:
+        while self.next_scene == "":
             self.input_process()
 
             screen.fill(BLACK)
