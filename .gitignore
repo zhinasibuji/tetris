@@ -1,4 +1,6 @@
 .venv
 .idea
 src/test.py
-__pychache__!/.venv/
+src/__pycache__
+
+
