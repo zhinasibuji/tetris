@@ -4,7 +4,6 @@
 
 ## 如何运行？
 
-    cd src
     python main.py
 
 ## 环境依赖
