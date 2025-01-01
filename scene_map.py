@@ -31,9 +31,20 @@ ARRAY_T = np.array(
 )
 ARRAYS = [ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T]
 
+
+def get_grid() -> None:
+    result = pygame.Surface((400, 600), flags = pygame.SRCALPHA)
+    for x in range(0, 20):
+        for y in range(0, 30):
+            square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+            pygame.draw.rect(result, WHITE, square_rect, width=2)
+
+    return result
+
 class Square:
-    def __init__(self, x: int, y: int) -> None:
+    def __init__(self, x: int, y: int, color: tuple) -> None:
         self.dropping = True
+        self.color = color
         self.x = x
         self.y = y
 
@@ -63,9 +74,9 @@ def positions(array, pos) -> list:
                 ls.append((x + pos[0], y + pos[1]))
     return ls
 
-def display_square(x: int, y: int) -> None:
+def display_square(x: int, y: int, color:tuple) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-    pygame.draw.rect(screen, WHITE, square_rect, width=2)
+    pygame.draw.rect(screen, color, square_rect)
 
 def chonghe(squares) -> bool:
     ls = [(square.x, square.y) for square in squares]
@@ -76,21 +87,22 @@ def yuejie_or_chonghe(squares) -> bool:
 
 def display_map(squares) -> None:
     for square in squares:
-        display_square(square.x, square.y)
+        display_square(square.x, square.y, square.color)
 
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
         self.next_scene = ""
-        self.squareset_array = np.array([])
+        self.squareset_array = None
+        self.squareset_color = None
         self.squareset_pos = [0, 0]
+        self.grid = get_grid()
 
     def call(self) -> None:
         self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
         
         while self.next_scene == "":
-
             self.input_process()
 
             if frame_count >= DIFFICULTY:
@@ -100,6 +112,7 @@ class SceneMap:
 
             screen.fill(BLACK)
             display_map(self.squares)
+            screen.blit(self.grid, (0, 0))
 
             pygame.display.flip()
             clock.tick(FPS)
@@ -139,20 +152,21 @@ class SceneMap:
         #清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
-        positions_list = positions(self.squareset_array,self.squareset_pos)
+        positions_list = positions(self.squareset_array, self.squareset_pos)
         for position in positions_list:
-            self.create_square(position[0], position[1])
+            self.create_square(position[0], position[1], self.squareset_color)
 
     def create_squareset(self) -> None:
-        #随机位置，随机形状
+        #随机位置，随机形状，随机颜色
         self.squareset_array = random.choice(ARRAYS)
         array_width = self.squareset_array.shape[0]
         x = random.randint(0, MAP_WIDTH - array_width)
         self.squareset_pos = [x, 0]
+        self.squareset_color = random.choice([RED, GREEN, BLUE])
 
         positions_list = positions(self.squareset_array,self.squareset_pos)
         for position in positions_list:
-            self.create_square(position[0], position[1])
+            self.create_square(position[0], position[1], self.squareset_color)
 
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
@@ -186,8 +200,8 @@ class SceneMap:
         else:
             self.squareset_pos[1] += 1
 
-    def create_square(self, x: int, y: int) -> None:
-        s = Square(x, y)
+    def create_square(self, x: int, y: int, color:tuple) -> None:
+        s = Square(x, y, color)
         self.squares.append(s)
 
 

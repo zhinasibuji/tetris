@@ -1,8 +1,12 @@
 import pygame
 import os
 
-WHITE = (255,255,255)
-BLACK = (0,0,0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+BLACK = (0, 0, 0)
+
 
 # 方块大小20x20（像素），地图大小20x30（方块数），边框粗为2像素
 SQUARE_SIZE = 20
@@ -26,14 +30,3 @@ if 'simhei' in fonts:
 else:
     big_font = pygame.font.Font(font_path, 64)
     small_font = pygame.font.Font(font_path, 32)
-
-def get_grid() -> None:
-    result = pygame.Surface((400, 600), flags = pygame.SRCALPHA)
-    for x in range(0, 20):
-        for y in range(0, 30):
-            square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-            pygame.draw.rect(result, WHITE, square_rect, width=2)
-
-    return result
-
-grud = get_grid()
