@@ -1,6 +1,5 @@
 .venv
 .idea
-src/test.py
-src/__pycache__
-
+test.py
+__pycache__
 
