@@ -18,7 +18,7 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 fonts = pygame.font.get_fonts()
-font_path = os.path.join("..", "font", "font")
+font_path = os.path.join("font", "font")
 
 if 'simhei' in fonts:
     big_font = pygame.font.SysFont('simhei', 64)
@@ -26,3 +26,14 @@ if 'simhei' in fonts:
 else:
     big_font = pygame.font.Font(font_path, 64)
     small_font = pygame.font.Font(font_path, 32)
+
+def get_grid() -> None:
+    result = pygame.Surface((400, 600), flags = pygame.SRCALPHA)
+    for x in range(0, 20):
+        for y in range(0, 30):
+            square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+            pygame.draw.rect(result, WHITE, square_rect, width=2)
+
+    return result
+
+grud = get_grid()
