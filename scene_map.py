@@ -92,17 +92,17 @@ def display_map(squares) -> None:
 class SceneMap:
     def __init__(self) -> None:
         self.squares = []
-        self.next_scene = ""
+        self.next_scene = None
         self.squareset_array = None
         self.squareset_color = None
-        self.squareset_pos = [0, 0]
+        self.squareset_pos = None
         self.grid = get_grid()
 
     def call(self) -> None:
         self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
         
-        while self.next_scene == "":
+        while self.next_scene is None:
             self.input_process()
 
             if frame_count >= DIFFICULTY:

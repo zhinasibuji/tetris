@@ -17,10 +17,10 @@ def draw_text(center_x: int, center_y: int, text: str, big: bool, chosen=False) 
 class SceneTitle:
     def __init__(self):
         self.choice = 0
-        self.next_scene = ""
+        self.next_scene = None
 
     def call(self):
-        while self.next_scene == "":
+        while self.next_scene is None:
             self.input_process()
 
             screen.fill(BLACK)
