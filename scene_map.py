@@ -188,7 +188,8 @@ class SceneMap:
             self.gameover()
 
     def gameover(self):
-        self.next_scene = "scene_gameover"
+        from scene_gameover import SceneGameover
+        self.next_scene = SceneGameover()
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)

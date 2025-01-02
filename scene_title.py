@@ -38,13 +38,14 @@ class SceneTitle:
                 self.keyboard_process(event.key)
 
     def keyboard_process(self, key):
+        from scene_map import SceneMap
         if key == pygame.K_UP:
             self.choice = max(0, self.choice - 1)
         elif key == pygame.K_DOWN:
             self.choice = min(1, self.choice + 1)
         if key == pygame.K_SPACE:
             if self.choice == 0:
-                self.next_scene = "scene_map"
+                self.next_scene = SceneMap()
             elif self.choice == 1:
                 sys.exit()
 
