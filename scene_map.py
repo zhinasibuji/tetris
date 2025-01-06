@@ -33,10 +33,10 @@ ARRAYS = [ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T]
 
 
 def get_grid() -> None:
-    result = pygame.Surface((400, 600), flags = pygame.SRCALPHA)
-    for x in range(0, 20):
-        for y in range(0, 30):
-            square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+    result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
+    for x in range(0, MAP_WIDTH):
+        for y in range(0, MAP_HEIGHT):
+            square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
             pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
 
     return result
