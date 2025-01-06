@@ -62,14 +62,12 @@ class Square:
                self.x not in range(MAP_WIDTH)
 
 #positions根据array和pos返回所有square的坐标
-def positions(array, pos) -> list:
+def positions(array, pos):
     max_x, max_y = array.shape
-    ls = []
     for x in range(max_x):
         for y in range(max_y):
             if array[y][x]:
-                ls.append((x + pos[0], y + pos[1]))
-    return ls
+                yield (x + pos[0], y + pos[1])
 
 def display_square(x: int, y: int, color:tuple) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
@@ -90,13 +88,10 @@ class SceneMap:
     def __init__(self) -> None:
         self.squares = []
         self.next_scene = None
-        self.squareset_array = None
-        self.squareset_color = None
-        self.squareset_pos = None
+        self.create_squareset()
         self.grid = get_grid()
 
     def call(self) -> None:
-        self.create_squareset()
         frame_count = 0#计时每60帧drop_or_land一次
         
         while self.next_scene is None:
