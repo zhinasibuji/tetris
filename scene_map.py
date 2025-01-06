@@ -37,7 +37,7 @@ def get_grid() -> None:
     for x in range(0, 20):
         for y in range(0, 30):
             square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-            pygame.draw.rect(result, WHITE, square_rect, width=2)
+            pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
 
     return result
 
@@ -146,7 +146,7 @@ class SceneMap:
 
         positions_list = positions(self.squareset_array, self.squareset_pos)
         for position in positions_list:
-            self.create_square(position[0], position[1], self.squareset_color)
+            self.create_square(*position, self.squareset_color)
 
     def create_squareset(self) -> None:
         #随机位置，随机形状，随机颜色
@@ -158,7 +158,7 @@ class SceneMap:
 
         positions_list = positions(self.squareset_array,self.squareset_pos)
         for position in positions_list:
-            self.create_square(position[0], position[1], self.squareset_color)
+            self.create_square(*position, self.squareset_color)
 
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
