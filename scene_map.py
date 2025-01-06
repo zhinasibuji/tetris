@@ -48,9 +48,6 @@ class Square:
         self.x = x
         self.y = y
 
-    def __str__(self) -> str:
-        return str([self.x, self.y])
-
     def drop(self) -> None:
         self.y += 1
 
