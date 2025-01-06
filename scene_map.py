@@ -116,7 +116,7 @@ class SceneMap:
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
 
-    def keyboard_process(self, key) -> None:
+    def keyboard_process(self, key: int) -> None:
         former = (copy.deepcopy(self.squares), self.squareset_pos)
 
         if key == pygame.K_LEFT:

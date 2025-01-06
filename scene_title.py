@@ -37,7 +37,7 @@ class SceneTitle:
             if event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
 
-    def keyboard_process(self, key):
+    def keyboard_process(self, key: int):
         from scene_map import SceneMap
         if key == pygame.K_UP:
             self.choice = max(0, self.choice - 1)
