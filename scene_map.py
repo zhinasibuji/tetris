@@ -93,7 +93,7 @@ class SceneMap:
         self.grid = get_grid()
 
     def call(self) -> None:
-        frame_count = 0#计时每60帧drop_or_land一次
+        frame_count = 0#计时多少帧drop_or_land一次
         
         while self.next_scene is None:
             self.input_process()
