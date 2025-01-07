@@ -31,7 +31,7 @@ ARRAY_T = np.array(
      [0, 1, 0],
      [0, 0, 0]]
 )
-ARRAYS = [ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T]
+ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
 
 def get_grid() -> None:
@@ -87,7 +87,7 @@ def chonghe(squares: list[Square]) -> bool:
     return len(ls) != len(set(ls))
 
 def yuejie_or_chonghe(squares: list[Square]) -> bool:
-    return any([s.yuejie() for s in squares]) or chonghe(squares)
+    return any(s.yuejie() for s in squares) or chonghe(squares)
 
 def display_map(squares: list[Square]) -> None:
     for square in squares:
