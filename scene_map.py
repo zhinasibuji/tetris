@@ -1,9 +1,10 @@
 import sys
-import copy
+from copy import deepcopy
 import random
 import numpy as np
 from configs import *
 from typing import Generator
+from dataclasses import dataclass
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
@@ -62,13 +63,20 @@ class Square:
         return self.y not in range(MAP_HEIGHT) or \
                self.x not in range(MAP_WIDTH)
 
+@dataclass
+class Squareset:
+    x: int
+    y: int
+    color: tuple
+    array: np.array
+
 #positions根据array和pos返回所有square的坐标
 def positions(squareset: dict) -> Generator:
-    max_x, max_y = squareset["array"].shape
+    max_x, max_y = squareset.array.shape
     for x in range(max_x):
         for y in range(max_y):
-            if squareset["array"][y][x]:
-                yield (x + squareset["x"], y + squareset["y"])
+            if squareset.array[y][x]:
+                yield (x + squareset.x, y + squareset.y)
 
 def display_square(x: int, y: int, color:tuple) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
@@ -89,7 +97,6 @@ class SceneMap:
     def __init__(self) -> None:
         self.squares = []
         self.next_scene = None
-        self.squareset = dict()
         self.create_squareset()
         self.grid = get_grid()
 
@@ -119,19 +126,19 @@ class SceneMap:
                 self.keyboard_process(event.key)
 
     def keyboard_process(self, key: int) -> None:
-        former = (copy.deepcopy(self.squares), self.squareset)
+        former = (deepcopy(self.squares), self.squareset)
 
         if key == pygame.K_LEFT:
             [s.left() for s in self.squares if s.dropping]
-            self.squareset["x"] -= 1
+            self.squareset.x -= 1
         elif key == pygame.K_RIGHT:
             [s.right() for s in self.squares if s.dropping]
-            self.squareset["x"] += 1
+            self.squareset.x += 1
         elif key == pygame.K_DOWN:
             while not yuejie_or_chonghe(self.squares):
-                former = (copy.deepcopy(self.squares), self.squareset)
+                former = (deepcopy(self.squares), self.squareset)
                 [s.drop() for s in self.squares if s.dropping]
-                self.squareset["y"] += 1
+                self.squareset.y += 1
             self.squares, self.squareset = former
             self.land()
             return
@@ -142,24 +149,26 @@ class SceneMap:
             self.squares, self.squareset = former
 
     def spin(self) -> None:
-        self.squareset["array"] = np.rot90(self.squareset["array"])
+        self.squareset.array = np.rot90(self.squareset.array)
         #清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
         for position in positions(self.squareset):
-            self.create_square(*position, self.squareset["color"])
+            self.create_square(*position, self.squareset.color)
 
     def create_squareset(self) -> None:
         #随机位置，随机形状，随机颜色
-        self.squareset["array"] = random.choice(ARRAYS)
-        array_width = self.squareset["array"].shape[0]
+        array = random.choice(ARRAYS)
+        array_width = array.shape[0]
         x = random.randint(0, MAP_WIDTH - array_width)
-        self.squareset["x"] = x
-        self.squareset["y"] = 0
-        self.squareset["color"] = random.choice([RED, GREEN, BLUE])
+        y = 0
+        color = random.choice([RED, GREEN, BLUE])
+
+        self.squareset = Squareset(x, y, color, array)
 
         for position in positions(self.squareset):
-            self.create_square(*position, self.squareset["color"])
+            self.create_square(*position, color)
+        
 
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
@@ -185,14 +194,14 @@ class SceneMap:
         self.next_scene = SceneGameover()
 
     def drop_or_land(self) -> None:
-        former_squares = copy.deepcopy(self.squares)
+        former_squares = deepcopy(self.squares)
         [s.drop() for s in self.squares if s.dropping]
 
         if yuejie_or_chonghe(self.squares):
             self.squares = former_squares
             self.land()
         else:
-            self.squareset["y"] += 1
+            self.squareset.y += 1
 
     def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
