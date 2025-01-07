@@ -15,11 +15,11 @@ def draw_text(center_x: int, center_y: int, text: str, big: bool, chosen=False) 
     screen.blit(surf, rect)
 
 class SceneTitle:
-    def __init__(self):
+    def __init__(self) -> None:
         self.choice = 0
         self.next_scene = None
 
-    def call(self):
+    def call(self) -> None:
         while self.next_scene is None:
             self.input_process()
 
@@ -30,14 +30,14 @@ class SceneTitle:
             pygame.display.flip()
             clock.tick(60)
 
-    def input_process(self):
+    def input_process(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
 
-    def keyboard_process(self, key: int):
+    def keyboard_process(self, key: int) -> None:
         from scene_map import SceneMap
         if key == pygame.K_UP:
             self.choice = max(0, self.choice - 1)
@@ -50,13 +50,13 @@ class SceneTitle:
                 sys.exit()
 
     @staticmethod
-    def draw_title():
+    def draw_title() -> None:
         #x居中，y约为四分之一窗口高
         x = SCREEN_WIDTH / 2
         y = SCREEN_HEIGHT / 4
         draw_text(x, y, "俄罗斯方块", True)
 
-    def draw_choices(self):
+    def draw_choices(self) -> None:
         x1 = x2 = SCREEN_WIDTH / 2
         y1 = SCREEN_HEIGHT * (5/8)
         y2 = SCREEN_HEIGHT * (6/8)

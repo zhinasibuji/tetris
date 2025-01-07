@@ -62,7 +62,7 @@ class Square:
                self.x not in range(MAP_WIDTH)
 
 #positions根据array和pos返回所有square的坐标
-def positions(squareset):
+def positions(squareset: dict):
     max_x, max_y = squareset["array"].shape
     for x in range(max_x):
         for y in range(max_y):
@@ -73,14 +73,14 @@ def display_square(x: int, y: int, color:tuple) -> None:
     square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
     pygame.draw.rect(screen, color, square_rect)
 
-def chonghe(squares) -> bool:
+def chonghe(squares: list[Square]) -> bool:
     ls = [(square.x, square.y) for square in squares]
     return len(ls) != len(set(ls))
 
-def yuejie_or_chonghe(squares) -> bool:
+def yuejie_or_chonghe(squares: list[Square]) -> bool:
     return any([s.yuejie() for s in squares]) or chonghe(squares)
 
-def display_map(squares) -> None:
+def display_map(squares: list[Square]) -> None:
     for square in squares:
         display_square(square.x, square.y, square.color)
 
@@ -140,7 +140,7 @@ class SceneMap:
         if yuejie_or_chonghe(self.squares):
             self.squares, self.squareset = former
 
-    def spin(self):
+    def spin(self) -> None:
         self.squareset["array"] = np.rot90(self.squareset["array"])
         #清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
@@ -181,7 +181,7 @@ class SceneMap:
         if chonghe(self.squares):
             self.gameover()
 
-    def gameover(self):
+    def gameover(self) -> None:
         from scene_gameover import SceneGameover
         self.next_scene = SceneGameover()
 
@@ -195,7 +195,7 @@ class SceneMap:
         else:
             self.squareset["y"] += 1
 
-    def create_square(self, x: int, y: int, color:tuple) -> None:
+    def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
         self.squares.append(s)
 
