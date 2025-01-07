@@ -145,8 +145,7 @@ class SceneMap:
         #清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
-        positions_list = positions(self.squareset)
-        for position in positions_list:
+        for position in positions(self.squareset):
             self.create_square(*position, self.squareset["color"])
 
     def create_squareset(self) -> None:
@@ -158,8 +157,7 @@ class SceneMap:
         self.squareset["y"] = 0
         self.squareset["color"] = random.choice([RED, GREEN, BLUE])
 
-        positions_list = positions(self.squareset)
-        for position in positions_list:
+        for position in positions(self.squareset):
             self.create_square(*position, self.squareset["color"])
 
     def xiaochu_benhang(self, line: int) -> None:
