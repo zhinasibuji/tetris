@@ -3,6 +3,7 @@ import copy
 import random
 import numpy as np
 from configs import *
+from typing import Generator
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
@@ -62,7 +63,7 @@ class Square:
                self.x not in range(MAP_WIDTH)
 
 #positions根据array和pos返回所有square的坐标
-def positions(squareset: dict):
+def positions(squareset: dict) -> Generator:
     max_x, max_y = squareset["array"].shape
     for x in range(max_x):
         for y in range(max_y):
