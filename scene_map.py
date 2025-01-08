@@ -52,18 +52,6 @@ class Square:
 
     def __hash__(self):
         return hash((self.x, self.y))
-    
-    def __eq__(self, other: "Square"):
-        return hash(self) == hash(other)
-
-    def drop(self) -> None:
-        self.y += 1
-
-    def left(self) -> None:
-        self.x -= 1
-
-    def right(self) -> None:
-        self.x += 1
 
     def yuejie(self) -> bool:
         return self.y not in range(MAP_HEIGHT) or \
@@ -130,21 +118,36 @@ class SceneMap:
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
 
+    def squareset_down(self):
+        for s in self.squares:
+            if s.dropping:
+                s.y += 1
+    
+    def squareset_left(self):
+        for s in self.squares:
+            if s.dropping:
+                s.x -= 1
+
+    def squareset_right(self):
+        for s in self.squares:
+            if s.dropping:
+                s.x += 1
+
     def keyboard_process(self, key: int) -> None:
         former_squares = copy.deepcopy(self.squares)
         former_squareset = copy.copy(self.squareset)
 
         if key == pygame.K_LEFT:
-            [s.left() for s in self.squares if s.dropping]
+            self.squareset_left()
             self.squareset.x -= 1
         elif key == pygame.K_RIGHT:
-            [s.right() for s in self.squares if s.dropping]
+            self.squareset_right()
             self.squareset.x += 1
         elif key == pygame.K_DOWN:
             while not yuejie_or_chonghe(self.squares):
                 former_squares = copy.deepcopy(self.squares)
                 former_squareset = copy.copy(self.squareset)
-                [s.drop() for s in self.squares if s.dropping]
+                self.squareset_down()
                 self.squareset.y += 1
             self.squares, self.squareset = former_squares, former_squareset
             self.land()
@@ -179,7 +182,9 @@ class SceneMap:
 
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
-        [s.drop() for s in self.squares if s.y < line]
+        for s in self.squares:
+            if s.y < line:
+                s.y += 1
 
     def xiaochu_manhang(self) -> None:
         for line in range(MAP_HEIGHT):
@@ -202,7 +207,7 @@ class SceneMap:
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
-        [s.drop() for s in self.squares if s.dropping]
+        self.squareset_down()
 
         if yuejie_or_chonghe(self.squares):
             self.squares = former_squares
