@@ -52,6 +52,9 @@ class Square:
 
     def __hash__(self) -> int:
         return hash((self.x, self.y))
+    
+    def __eq__(self, other) -> bool:
+        return self.x == other.x and self.y == other.y
 
     def yuejie(self) -> bool:
         return self.y not in range(MAP_HEIGHT) or \
