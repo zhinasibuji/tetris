@@ -1,19 +1,6 @@
 import sys
 from configs import *
 
-def draw_text(center_x: int, center_y: int, text: str, big: bool, chosen=False) -> None:
-    if big:
-        font = big_font
-    else:
-        font = small_font
-    if chosen:
-        surf = font.render(text, True, BLACK, WHITE)
-    else:
-        surf = font.render(text, True, WHITE)
-    rect = surf.get_rect()
-    rect.center = (center_x, center_y)
-    screen.blit(surf, rect)
-
 class SceneTitle:
     def __init__(self) -> None:
         self.choice = 0
@@ -54,18 +41,18 @@ class SceneTitle:
         #x居中，y约为四分之一窗口高
         x = SCREEN_WIDTH / 2
         y = SCREEN_HEIGHT / 4
-        draw_text(x, y, "俄罗斯方块", True)
+        draw_text(x, y, "俄罗斯方块",big=True)
 
     def draw_choices(self) -> None:
         x1 = x2 = SCREEN_WIDTH / 2
         y1 = SCREEN_HEIGHT * (5/8)
         y2 = SCREEN_HEIGHT * (6/8)
         if self.choice == 0:
-            draw_text(x1, y1, "开始游戏", False, chosen=True)
-            draw_text(x2, y2, "退出游戏", False)
+            draw_text(x1, y1, "开始游戏", chosen=True)
+            draw_text(x2, y2, "退出游戏")
         elif self.choice == 1:
-            draw_text(x1, y1, "开始游戏", False)
-            draw_text(x2, y2, "退出游戏", False, chosen=True)
+            draw_text(x1, y1, "开始游戏")
+            draw_text(x2, y2, "退出游戏", chosen=True)
 
 
 if __name__ == '__main__':

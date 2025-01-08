@@ -30,3 +30,16 @@ else:
     font_path = os.path.join("font", "font")
     big_font = pygame.font.Font(font_path, 64)
     small_font = pygame.font.Font(font_path, 32)
+
+def draw_text(center_x: int, center_y: int, text: str, big=False, chosen=False) -> None:
+    if big:
+        font = big_font
+    else:
+        font = small_font
+    if chosen:
+        surf = font.render(text, True, BLACK, WHITE)
+    else:
+        surf = font.render(text, True, WHITE)
+    rect = surf.get_rect()
+    rect.center = (center_x, center_y)
+    screen.blit(surf, rect)
