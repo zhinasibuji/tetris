@@ -57,9 +57,9 @@ class Squareset:
     x: int
     y: int
     color: tuple
-    array: np.array
+    array: np.ndarray
 
-def get_grid() -> None:
+def get_grid() -> pygame.Surface:
     result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
     for x in range(0, MAP_WIDTH):
         for y in range(0, MAP_HEIGHT):
@@ -136,7 +136,7 @@ class SceneMap(SceneBase):
                 s.x += 1
 
     @property
-    def difficulty(self):
+    def difficulty(self) -> int:
         return max(5, DIFFICULTY - self.score)
 
     def display_score(self) -> None:
@@ -222,7 +222,7 @@ class SceneMap(SceneBase):
         self.next_scene = SceneGameover()
         self.save_best_score()
 
-    def save_best_score(self):
+    def save_best_score(self) -> None:
         if self.score > self.best_score:
             with open("save.json", "w") as file:
                 json.dump(self.score, file)
@@ -241,7 +241,7 @@ class SceneMap(SceneBase):
         s = Square(x, y, color)
         self.squares.append(s)
 
-    def get_best_score(self):
+    def get_best_score(self) -> int:
         if os.path.exists("save.json"):
             with open("save.json", "r") as file:
                 return json.load(file)
