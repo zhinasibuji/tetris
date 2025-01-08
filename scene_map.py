@@ -96,12 +96,12 @@ class SceneMap(SceneBase):
         self.grid = get_grid()
         self.frame_count = 0
 
-    def draw(self):
+    def draw(self) -> None:
         screen.fill(BLACK)
         display_map(self.squares)
         screen.blit(self.grid, (0, 0))
 
-    def data_process(self):
+    def data_process(self) -> None:
         if self.frame_count >= DIFFICULTY:
             self.drop_or_land()
             self.frame_count = 0

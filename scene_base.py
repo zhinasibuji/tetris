@@ -9,10 +9,10 @@ big_font = pygame.font.SysFont('simhei', 64)
 small_font = pygame.font.SysFont('simhei', 32)
 
 class SceneBase:
-    def __init__(self):
+    def __init__(self) -> None:
         self.next_scene = None
     
-    def call(self):
+    def call(self) -> None:
         while self.next_scene is None:
             self.input_process()
             self.data_process()
@@ -21,7 +21,7 @@ class SceneBase:
             pygame.display.flip()
             clock.tick(60)
 
-    def data_process(self):
+    def data_process(self) -> None:
         pass
 
     def draw_text(self, center_x: int, center_y: int, text: str, big=False, chosen=False) -> None:

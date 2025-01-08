@@ -6,7 +6,7 @@ class SceneGameover(SceneBase):
         super().__init__()
         self.choice = 0
 
-    def draw(self):
+    def draw(self) -> None:
         screen.fill(BLACK)
         self.draw_gameover()
         self.draw_choices()
