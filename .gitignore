@@ -2,4 +2,8 @@
 .idea
 test.py
 __pycache__
+*.spec
+build
+dist
+
 
