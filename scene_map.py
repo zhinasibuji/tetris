@@ -94,17 +94,16 @@ class SceneMap:
         self.next_scene = None
         self.create_squareset()
         self.grid = get_grid()
+        self.frame_count = 0
 
     def call(self) -> None:
-        frame_count = 0#计时多少帧drop_or_land一次
-        
         while self.next_scene is None:
             self.input_process()
 
-            if frame_count >= DIFFICULTY:
+            if self.frame_count >= DIFFICULTY:
                 self.drop_or_land()
-                frame_count = 0
-            frame_count += 1
+                self.frame_count = 0
+            self.frame_count += 1
 
             screen.fill(BLACK)
             display_map(self.squares)
@@ -184,7 +183,6 @@ class SceneMap:
         for position in positions(self.squareset):
             self.create_square(*position, color)
         
-
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
         for s in self.squares:
