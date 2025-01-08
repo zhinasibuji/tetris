@@ -133,7 +133,7 @@ class SceneMap(SceneBase):
 
     @property
     def difficulty(self):
-        return max(2, DIFFICULTY - self.score)
+        return max(5, DIFFICULTY - self.score)
 
     def display_score(self) -> None:
         x = SCREEN_WIDTH * 5 / 6
