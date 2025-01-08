@@ -95,11 +95,13 @@ class SceneMap(SceneBase):
         self.create_squareset()
         self.grid = get_grid()
         self.frame_count = 0
+        self.score = 0
 
     def draw(self) -> None:
         screen.fill(BLACK)
         display_map(self.squares)
         screen.blit(self.grid, (0, 0))
+        self.display_score()
 
     def data_process(self) -> None:
         if self.frame_count >= DIFFICULTY:
@@ -128,6 +130,11 @@ class SceneMap(SceneBase):
         for s in self.squares:
             if s.dropping:
                 s.x += 1
+
+    def display_score(self) -> None:
+        x = SCREEN_WIDTH * 5 / 6
+        y = SCREEN_HEIGHT * 1 / 6
+        self.draw_text(x, y, f"得分：{self.score}")
 
     def direct_land(self) -> None:
         while not yuejie_or_chonghe(self.squares):
@@ -189,6 +196,7 @@ class SceneMap(SceneBase):
             ls = [s for s in self.squares if s.y == line]
             if len(ls) == MAP_WIDTH:
                 self.xiaochu_benhang(line)
+                self.score += 1
 
     def land(self) -> None:
         #将所有squares的dropping设为False
@@ -216,6 +224,7 @@ class SceneMap(SceneBase):
     def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
         self.squares.append(s)
+
 
 
 

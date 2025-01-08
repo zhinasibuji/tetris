@@ -38,8 +38,8 @@ class SceneTitle(SceneBase):
 
     def draw_choices(self) -> None:
         x1 = x2 = SCREEN_WIDTH / 2
-        y1 = SCREEN_HEIGHT * (5/8)
-        y2 = SCREEN_HEIGHT * (6/8)
+        y1 = SCREEN_HEIGHT * 5 / 8
+        y2 = SCREEN_HEIGHT * 6 / 8
         if self.choice == 0:
             self.draw_text(x1, y1, "开始游戏", chosen=True)
             self.draw_text(x2, y2, "退出游戏")
