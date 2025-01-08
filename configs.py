@@ -1,5 +1,4 @@
 import pygame
-import os
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -21,15 +20,9 @@ SCREEN_HEIGHT = 600
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
-fonts = pygame.font.get_fonts()
 
-if 'simhei' in fonts:
-    big_font = pygame.font.SysFont('simhei', 64)
-    small_font = pygame.font.SysFont('simhei', 32)
-else:
-    font_path = os.path.join("font", "font")
-    big_font = pygame.font.Font(font_path, 64)
-    small_font = pygame.font.Font(font_path, 32)
+big_font = pygame.font.SysFont('simhei', 64)
+small_font = pygame.font.SysFont('simhei', 32)
 
 def draw_text(center_x: int, center_y: int, text: str, big=False, chosen=False) -> None:
     if big:
