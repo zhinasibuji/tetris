@@ -118,17 +118,17 @@ class SceneMap:
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
 
-    def squareset_down(self):
+    def squareset_down(self) -> None:
         for s in self.squares:
             if s.dropping:
                 s.y += 1
     
-    def squareset_left(self):
+    def squareset_left(self) -> None:
         for s in self.squares:
             if s.dropping:
                 s.x -= 1
 
-    def squareset_right(self):
+    def squareset_right(self) -> None:
         for s in self.squares:
             if s.dropping:
                 s.x += 1
