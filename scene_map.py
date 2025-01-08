@@ -1,8 +1,10 @@
+import os
 import sys
 import copy
 import random
 from typing import Generator
 from dataclasses import dataclass
+import pickle
 import numpy as np
 from scene_base import *
 
@@ -96,6 +98,7 @@ class SceneMap(SceneBase):
         self.grid = get_grid()
         self.frame_count = 0
         self.score = 0
+        self.best_score = self.get_best_score()
 
     def draw(self) -> None:
         screen.fill(BLACK)
@@ -112,6 +115,7 @@ class SceneMap(SceneBase):
     def input_process(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.save_best_score()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
@@ -137,8 +141,10 @@ class SceneMap(SceneBase):
 
     def display_score(self) -> None:
         x = SCREEN_WIDTH * 5 / 6
-        y = SCREEN_HEIGHT * 1 / 6
-        self.draw_text(x, y, f"得分：{self.score}")
+        y1 = SCREEN_HEIGHT * 1 / 6
+        y2 = y1 + 50
+        self.draw_text(x, y1, f"得分：{self.score}")
+        self.draw_text(x, y2, f"最高分：{self.best_score}")
 
     def direct_land(self) -> None:
         while not yuejie_or_chonghe(self.squares):
@@ -214,6 +220,11 @@ class SceneMap(SceneBase):
     def gameover(self) -> None:
         from scene_gameover import SceneGameover
         self.next_scene = SceneGameover()
+        self.save_best_score()
+
+    def save_best_score(self):
+        with open("save.pickle", "wb") as file:
+            pickle.dump(self.score, file)
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
@@ -229,8 +240,14 @@ class SceneMap(SceneBase):
         s = Square(x, y, color)
         self.squares.append(s)
 
-
-
+    def get_best_score(self):
+        if os.path.exists("save.pickle"):
+            with open("save.pickle", "rb") as file:
+                return pickle.load(file)
+        else:
+            with open("save.pickle", "wb") as file:
+                pickle.dump(0, file)
+            return 0
 
 if __name__ == '__main__':
     scene = SceneMap()
