@@ -1,5 +1,3 @@
-import pygame
-
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -16,10 +14,3 @@ FPS = 60
 DIFFICULTY = 30#多少帧下降一次，越大难度越低
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 600
-
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-clock = pygame.time.Clock()
-
-big_font = pygame.font.SysFont('simhei', 64)
-small_font = pygame.font.SysFont('simhei', 32)

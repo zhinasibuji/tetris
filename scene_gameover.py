@@ -1,6 +1,5 @@
 import sys
-from configs import *
-from scene_base import SceneBase
+from scene_base import *
 
 class SceneGameover(SceneBase):
     def __init__(self) -> None:

@@ -4,8 +4,7 @@ import random
 from typing import Generator
 from dataclasses import dataclass
 import numpy as np
-from configs import *
-from scene_base import SceneBase
+from scene_base import *
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
