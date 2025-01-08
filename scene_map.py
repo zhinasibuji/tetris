@@ -1,10 +1,10 @@
 import sys
-from copy import deepcopy
+import copy
 import random
-import numpy as np
-from configs import *
 from typing import Generator
 from dataclasses import dataclass
+import numpy as np
+from configs import *
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
@@ -126,7 +126,8 @@ class SceneMap:
                 self.keyboard_process(event.key)
 
     def keyboard_process(self, key: int) -> None:
-        former = (deepcopy(self.squares), self.squareset)
+        former_squares = copy.deepcopy(self.squares)
+        former_squareset = copy.copy(self.squareset)
 
         if key == pygame.K_LEFT:
             [s.left() for s in self.squares if s.dropping]
@@ -136,17 +137,18 @@ class SceneMap:
             self.squareset.x += 1
         elif key == pygame.K_DOWN:
             while not yuejie_or_chonghe(self.squares):
-                former = (deepcopy(self.squares), self.squareset)
+                former_squares = copy.deepcopy(self.squares)
+                former_squareset = copy.copy(self.squareset)
                 [s.drop() for s in self.squares if s.dropping]
                 self.squareset.y += 1
-            self.squares, self.squareset = former
+            self.squares, self.squareset = former_squares, former_squareset
             self.land()
             return
         elif key == pygame.K_SPACE:
             self.spin()
 
         if yuejie_or_chonghe(self.squares):
-            self.squares, self.squareset = former
+            self.squares, self.squareset = former_squares, former_squareset
 
     def spin(self) -> None:
         self.squareset.array = np.rot90(self.squareset.array)
@@ -194,7 +196,7 @@ class SceneMap:
         self.next_scene = SceneGameover()
 
     def drop_or_land(self) -> None:
-        former_squares = deepcopy(self.squares)
+        former_squares = copy.deepcopy(self.squares)
         [s.drop() for s in self.squares if s.dropping]
 
         if yuejie_or_chonghe(self.squares):
