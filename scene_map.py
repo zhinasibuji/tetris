@@ -133,6 +133,15 @@ class SceneMap:
             if s.dropping:
                 s.x += 1
 
+    def direct_land(self) -> None:
+        while not yuejie_or_chonghe(self.squares):
+            former_squares = copy.deepcopy(self.squares)
+            former_squareset = copy.copy(self.squareset)
+            self.squareset_down()
+            self.squareset.y += 1
+        self.squares, self.squareset = former_squares, former_squareset
+        self.land()
+
     def keyboard_process(self, key: int) -> None:
         former_squares = copy.deepcopy(self.squares)
         former_squareset = copy.copy(self.squareset)
@@ -144,13 +153,7 @@ class SceneMap:
             self.squareset_right()
             self.squareset.x += 1
         elif key == pygame.K_DOWN:
-            while not yuejie_or_chonghe(self.squares):
-                former_squares = copy.deepcopy(self.squares)
-                former_squareset = copy.copy(self.squareset)
-                self.squareset_down()
-                self.squareset.y += 1
-            self.squares, self.squareset = former_squares, former_squareset
-            self.land()
+            self.direct_land()
             return
         elif key == pygame.K_SPACE:
             self.spin()
