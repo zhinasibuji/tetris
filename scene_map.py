@@ -104,7 +104,7 @@ class SceneMap(SceneBase):
         self.display_score()
 
     def data_process(self) -> None:
-        if self.frame_count >= DIFFICULTY:
+        if self.frame_count >= self.difficulty:
             self.drop_or_land()
             self.frame_count = 0
         self.frame_count += 1
@@ -130,6 +130,10 @@ class SceneMap(SceneBase):
         for s in self.squares:
             if s.dropping:
                 s.x += 1
+
+    @property
+    def difficulty(self):
+        return max(2, DIFFICULTY - self.score)
 
     def display_score(self) -> None:
         x = SCREEN_WIDTH * 5 / 6
