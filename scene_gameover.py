@@ -1,7 +1,8 @@
 import sys
 from configs import *
+from scene_base import SceneBase
 
-class SceneGameover:
+class SceneGameover(SceneBase):
     def __init__(self) -> None:
         self.choice = 0
         self.next_scene = None
@@ -36,23 +37,22 @@ class SceneGameover:
             elif self.choice == 1:
                 sys.exit()
 
-    @staticmethod
-    def draw_gameover() -> None:
+    def draw_gameover(self) -> None:
         #x居中，y约为四分之一窗口高
         x = SCREEN_WIDTH / 2
         y = SCREEN_HEIGHT / 4
-        draw_text(x, y, "游戏失败", big = True)
+        self.draw_text(x, y, "游戏失败", big = True)
 
     def draw_choices(self) -> None:
         x1 = x2 = SCREEN_WIDTH / 2
         y1 = SCREEN_HEIGHT * (5/8)
         y2 = SCREEN_HEIGHT * (6/8)
         if self.choice == 0:
-            draw_text(x1, y1, "再来一次", chosen=True)
-            draw_text(x2, y2, "退出游戏")
+            self.draw_text(x1, y1, "再来一次", chosen=True)
+            self.draw_text(x2, y2, "退出游戏")
         elif self.choice == 1:
-            draw_text(x1, y1, "再来一次")
-            draw_text(x2, y2, "退出游戏", chosen=True)
+            self.draw_text(x1, y1, "再来一次")
+            self.draw_text(x2, y2, "退出游戏", chosen=True)
 
 
 if __name__ == '__main__':

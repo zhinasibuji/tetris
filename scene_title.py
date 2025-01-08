@@ -1,21 +1,16 @@
 import sys
 from configs import *
+from scene_base import SceneBase
 
-class SceneTitle:
+class SceneTitle(SceneBase):
     def __init__(self) -> None:
+        super().__init__()
         self.choice = 0
-        self.next_scene = None
 
-    def call(self) -> None:
-        while self.next_scene is None:
-            self.input_process()
-
-            screen.fill(BLACK)
-            self.draw_title()
-            self.draw_choices()
-
-            pygame.display.flip()
-            clock.tick(60)
+    def draw(self):
+        screen.fill(BLACK)
+        self.draw_title()
+        self.draw_choices()
 
     def input_process(self) -> None:
         for event in pygame.event.get():
@@ -36,23 +31,22 @@ class SceneTitle:
             elif self.choice == 1:
                 sys.exit()
 
-    @staticmethod
-    def draw_title() -> None:
+    def draw_title(self) -> None:
         #x居中，y约为四分之一窗口高
         x = SCREEN_WIDTH / 2
         y = SCREEN_HEIGHT / 4
-        draw_text(x, y, "俄罗斯方块",big=True)
+        self.draw_text(x, y, "俄罗斯方块",big=True)
 
     def draw_choices(self) -> None:
         x1 = x2 = SCREEN_WIDTH / 2
         y1 = SCREEN_HEIGHT * (5/8)
         y2 = SCREEN_HEIGHT * (6/8)
         if self.choice == 0:
-            draw_text(x1, y1, "开始游戏", chosen=True)
-            draw_text(x2, y2, "退出游戏")
+            self.draw_text(x1, y1, "开始游戏", chosen=True)
+            self.draw_text(x2, y2, "退出游戏")
         elif self.choice == 1:
-            draw_text(x1, y1, "开始游戏")
-            draw_text(x2, y2, "退出游戏", chosen=True)
+            self.draw_text(x1, y1, "开始游戏")
+            self.draw_text(x2, y2, "退出游戏", chosen=True)
 
 
 if __name__ == '__main__':

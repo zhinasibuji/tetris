@@ -5,6 +5,7 @@ from typing import Generator
 from dataclasses import dataclass
 import numpy as np
 from configs import *
+from scene_base import SceneBase
 
 ARRAY_I = np.array(
     [[0, 0, 1, 0],
@@ -88,7 +89,7 @@ def display_map(squares: list[Square]) -> None:
     for square in squares:
         display_square(square.x, square.y, square.color)
 
-class SceneMap:
+class SceneMap(SceneBase):
     def __init__(self) -> None:
         self.squares = []
         self.next_scene = None
@@ -96,21 +97,16 @@ class SceneMap:
         self.grid = get_grid()
         self.frame_count = 0
 
-    def call(self) -> None:
-        while self.next_scene is None:
-            self.input_process()
+    def draw(self):
+        screen.fill(BLACK)
+        display_map(self.squares)
+        screen.blit(self.grid, (0, 0))
 
-            if self.frame_count >= DIFFICULTY:
-                self.drop_or_land()
-                self.frame_count = 0
-            self.frame_count += 1
-
-            screen.fill(BLACK)
-            display_map(self.squares)
-            screen.blit(self.grid, (0, 0))
-
-            pygame.display.flip()
-            clock.tick(FPS)
+    def data_process(self):
+        if self.frame_count >= DIFFICULTY:
+            self.drop_or_land()
+            self.frame_count = 0
+        self.frame_count += 1
 
     def input_process(self) -> None:
         for event in pygame.event.get():
