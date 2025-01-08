@@ -50,7 +50,7 @@ class Square:
         self.x = x
         self.y = y
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.x, self.y))
 
     def yuejie(self) -> bool:
