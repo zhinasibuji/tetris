@@ -33,16 +33,6 @@ ARRAY_T = np.array(
 )
 ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
-
-def get_grid() -> None:
-    result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
-    for x in range(0, MAP_WIDTH):
-        for y in range(0, MAP_HEIGHT):
-            square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
-            pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
-
-    return result
-
 class Square:
     def __init__(self, x: int, y: int, color: tuple) -> None:
         self.dropping = True
@@ -66,6 +56,15 @@ class Squareset:
     y: int
     color: tuple
     array: np.array
+
+def get_grid() -> None:
+    result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
+    for x in range(0, MAP_WIDTH):
+        for y in range(0, MAP_HEIGHT):
+            square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+            pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
+
+    return result
 
 #positions根据array和pos返回所有square的坐标
 def positions(squareset: dict) -> Generator:
