@@ -50,6 +50,12 @@ class Square:
         self.x = x
         self.y = y
 
+    def __hash__(self):
+        return hash((self.x, self.y))
+    
+    def __eq__(self, other: "Square"):
+        return hash(self) == hash(other)
+
     def drop(self) -> None:
         self.y += 1
 
@@ -83,8 +89,7 @@ def display_square(x: int, y: int, color:tuple) -> None:
     pygame.draw.rect(screen, color, square_rect)
 
 def chonghe(squares: list[Square]) -> bool:
-    ls = [(square.x, square.y) for square in squares]
-    return len(ls) != len(set(ls))
+    return len(squares) != len(set(squares))
 
 def yuejie_or_chonghe(squares: list[Square]) -> bool:
     return any(s.yuejie() for s in squares) or chonghe(squares)
