@@ -3,19 +3,13 @@ from scene_base import *
 
 class SceneGameover(SceneBase):
     def __init__(self) -> None:
+        super().__init__()
         self.choice = 0
-        self.next_scene = None
 
-    def call(self) -> None:
-        while self.next_scene is None:
-            self.input_process()
-
-            screen.fill(BLACK)
-            self.draw_gameover()
-            self.draw_choices()
-
-            pygame.display.flip()
-            clock.tick(60)
+    def draw(self):
+        screen.fill(BLACK)
+        self.draw_gameover()
+        self.draw_choices()
 
     def input_process(self) -> None:
         for event in pygame.event.get():

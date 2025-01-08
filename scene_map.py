@@ -90,8 +90,8 @@ def display_map(squares: list[Square]) -> None:
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
+        super().__init__()
         self.squares = []
-        self.next_scene = None
         self.create_squareset()
         self.grid = get_grid()
         self.frame_count = 0
