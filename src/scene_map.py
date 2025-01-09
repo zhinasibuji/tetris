@@ -59,55 +59,24 @@ class Squareset:
     color: tuple
     array: np.ndarray
 
-def get_grid() -> pygame.Surface:
-    result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
-    for x in range(0, MAP_WIDTH):
-        for y in range(0, MAP_HEIGHT):
-            square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
-            pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
-
-    return result
-
-#positions根据array和pos返回所有square的坐标
-def positions(squareset: Squareset) -> Generator:
-    max_x, max_y = squareset.array.shape
-    for x in range(max_x):
-        for y in range(max_y):
-            if squareset.array[y][x]:
-                yield (x + squareset.x, y + squareset.y)
-
-def display_square(x: int, y: int, color:tuple) -> None:
-    square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-    pygame.draw.rect(screen, color, square_rect)
-
-def chonghe(squares: list[Square]) -> bool:
-    return len(squares) != len(set(squares))
-
-def yuejie_or_chonghe(squares: list[Square]) -> bool:
-    return any(s.yuejie() for s in squares) or chonghe(squares)
-
-def display_map(squares: list[Square]) -> None:
-    for square in squares:
-        display_square(square.x, square.y, square.color)
-
 class SceneMap(SceneBase):
     def __init__(self) -> None:
         super().__init__()
         self.squares = []
         self.create_squareset()
-        self.grid = get_grid()
+        self.grid = self.get_grid()
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
 
     def draw(self) -> None:
         screen.fill(BLACK)
-        display_map(self.squares)
+        self.display_map()
         screen.blit(self.grid, (0, 0))
         self.display_score()
 
     def data_process(self) -> None:
-        if self.frame_count >= self.difficulty:
+        if self.frame_count >= self.get_difficulty():
             self.drop_or_land()
             self.frame_count = 0
         self.frame_count += 1
@@ -135,8 +104,7 @@ class SceneMap(SceneBase):
             if s.dropping:
                 s.x += 1
 
-    @property
-    def difficulty(self) -> int:
+    def get_difficulty(self) -> int:
         return max(5, DIFFICULTY - self.score)
 
     def display_score(self) -> None:
@@ -149,7 +117,7 @@ class SceneMap(SceneBase):
     def direct_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
         former_squareset = copy.copy(self.squareset)
-        while not yuejie_or_chonghe(self.squares):
+        while not self.yuejie_or_chonghe():
             former_squares = copy.deepcopy(self.squares)
             former_squareset = copy.copy(self.squareset)
             self.squareset_down()
@@ -173,7 +141,7 @@ class SceneMap(SceneBase):
         elif key == pygame.K_SPACE:
             self.spin()
 
-        if yuejie_or_chonghe(self.squares):
+        if self.yuejie_or_chonghe():
             self.squares, self.squareset = former_squares, former_squareset
 
     def spin(self) -> None:
@@ -181,7 +149,7 @@ class SceneMap(SceneBase):
         #清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
-        for position in positions(self.squareset):
+        for position in self.positions():
             self.create_square(position[0], position[1], self.squareset.color)
 
     def create_squareset(self) -> None:
@@ -194,7 +162,7 @@ class SceneMap(SceneBase):
 
         self.squareset = Squareset(x, y, color, array)
 
-        for position in positions(self.squareset):
+        for position in self.positions():
             self.create_square(position[0], position[1], color)
         
     def xiaochu_benhang(self, line: int) -> None:
@@ -216,7 +184,7 @@ class SceneMap(SceneBase):
             square.dropping = False
         self.xiaochu_manhang()
         self.create_squareset()
-        if chonghe(self.squares):
+        if self.chonghe():
             self.gameover()
 
     def gameover(self) -> None:
@@ -233,7 +201,7 @@ class SceneMap(SceneBase):
         former_squares = copy.deepcopy(self.squares)
         self.squareset_down()
 
-        if yuejie_or_chonghe(self.squares):
+        if self.yuejie_or_chonghe():
             self.squares = former_squares
             self.land()
         else:
@@ -251,6 +219,37 @@ class SceneMap(SceneBase):
             with open("save.json", "w") as file:
                 json.dump(0, file)
             return 0
+        
+    def get_grid(self) -> pygame.Surface:
+        result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
+        for x in range(0, MAP_WIDTH):
+            for y in range(0, MAP_HEIGHT):
+                square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
+                pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
+
+        return result
+
+    #positions根据array和pos返回所有square的坐标
+    def positions(self) -> Generator:
+        max_x, max_y = self.squareset.array.shape
+        for x in range(max_x):
+            for y in range(max_y):
+                if self.squareset.array[y][x]:
+                    yield (x + self.squareset.x, y + self.squareset.y)
+
+    def display_square(self, x: int, y: int, color:tuple) -> None:
+        square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+        pygame.draw.rect(screen, color, square_rect)
+
+    def chonghe(self) -> bool:
+        return len(self.squares) != len(set(self.squares))
+
+    def yuejie_or_chonghe(self) -> bool:
+        return any(s.yuejie() for s in self.squares) or self.chonghe()
+
+    def display_map(self) -> None:
+        for square in self.squares:
+            self.display_square(square.x, square.y, square.color)
 
 if __name__ == '__main__':
     scene = SceneMap()
