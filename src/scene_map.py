@@ -75,19 +75,26 @@ class SceneMap(SceneBase):
         screen.blit(self.grid, (0, 0))
         self.display_score()
 
+    def display_map(self) -> None:
+        for square in self.squares:
+            self.display_square(square.x, square.y, square.color)
+
+    def display_score(self) -> None:
+        x = int(SCREEN_WIDTH * 5 / 6)
+        y1 = int(SCREEN_HEIGHT * 1 / 6)
+        y2 = y1 + 50
+        self.draw_text(x, y1, f"得分：{self.score}")
+        self.draw_text(x, y2, f"最高分：{self.best_score}")
+        
+    def display_square(self, x: int, y: int, color:tuple) -> None:
+        square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
+        pygame.draw.rect(screen, color, square_rect)
+
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
             self.drop_or_land()
             self.frame_count = 0
         self.frame_count += 1
-
-    def input_process(self) -> None:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.save_best_score()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                self.keyboard_process(event.key)
 
     def squareset_down(self) -> None:
         for s in self.squares:
@@ -107,13 +114,6 @@ class SceneMap(SceneBase):
     def get_difficulty(self) -> int:
         return max(5, DIFFICULTY - self.score)
 
-    def display_score(self) -> None:
-        x = int(SCREEN_WIDTH * 5 / 6)
-        y1 = int(SCREEN_HEIGHT * 1 / 6)
-        y2 = y1 + 50
-        self.draw_text(x, y1, f"得分：{self.score}")
-        self.draw_text(x, y2, f"最高分：{self.best_score}")
-
     def direct_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
         former_squareset = copy.copy(self.squareset)
@@ -124,25 +124,6 @@ class SceneMap(SceneBase):
             self.squareset.y += 1
         self.squares, self.squareset = former_squares, former_squareset
         self.land()
-
-    def keyboard_process(self, key: int) -> None:
-        former_squares = copy.deepcopy(self.squares)
-        former_squareset = copy.copy(self.squareset)
-
-        if key == pygame.K_LEFT:
-            self.squareset_left()
-            self.squareset.x -= 1
-        elif key == pygame.K_RIGHT:
-            self.squareset_right()
-            self.squareset.x += 1
-        elif key == pygame.K_DOWN:
-            self.direct_land()
-            return
-        elif key == pygame.K_SPACE:
-            self.spin()
-
-        if self.yuejie_or_chonghe():
-            self.squares, self.squareset = former_squares, former_squareset
 
     def spin(self) -> None:
         self.squareset.array = np.rot90(self.squareset.array)
@@ -237,19 +218,39 @@ class SceneMap(SceneBase):
                 if self.squareset.array[y][x]:
                     yield (x + self.squareset.x, y + self.squareset.y)
 
-    def display_square(self, x: int, y: int, color:tuple) -> None:
-        square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
-        pygame.draw.rect(screen, color, square_rect)
-
     def chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
 
     def yuejie_or_chonghe(self) -> bool:
         return any(s.yuejie() for s in self.squares) or self.chonghe()
 
-    def display_map(self) -> None:
-        for square in self.squares:
-            self.display_square(square.x, square.y, square.color)
+    def input_process(self) -> None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.save_best_score()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self.keyboard_process(event.key)
+
+    def keyboard_process(self, key: int) -> None:
+        former_squares = copy.deepcopy(self.squares)
+        former_squareset = copy.copy(self.squareset)
+
+        if key == pygame.K_LEFT:
+            self.squareset_left()
+            self.squareset.x -= 1
+        elif key == pygame.K_RIGHT:
+            self.squareset_right()
+            self.squareset.x += 1
+        elif key == pygame.K_DOWN:
+            self.direct_land()
+            return
+        elif key == pygame.K_SPACE:
+            self.spin()
+
+        if self.yuejie_or_chonghe():
+            self.squares, self.squareset = former_squares, former_squareset
+
 
 if __name__ == '__main__':
     scene = SceneMap()
