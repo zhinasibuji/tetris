@@ -24,6 +24,12 @@ class SceneBase:
     def data_process(self) -> None:
         pass
 
+    def draw(self) -> None:
+        pass
+
+    def input_process(self) -> None:
+        pass
+
     def draw_text(self, center_x: int, center_y: int, text: str, big=False, chosen=False) -> None:
         if big:
             font = big_font

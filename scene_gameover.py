@@ -32,14 +32,14 @@ class SceneGameover(SceneBase):
 
     def draw_gameover(self) -> None:
         #x居中，y约为四分之一窗口高
-        x = SCREEN_WIDTH / 2
-        y = SCREEN_HEIGHT / 4
+        x = int(SCREEN_WIDTH / 2)
+        y = int(SCREEN_HEIGHT / 4)
         self.draw_text(x, y, "游戏失败", big = True)
 
     def draw_choices(self) -> None:
-        x1 = x2 = SCREEN_WIDTH / 2
-        y1 = SCREEN_HEIGHT * 5 / 8
-        y2 = SCREEN_HEIGHT * 6 / 8
+        x1 = x2 = int(SCREEN_WIDTH / 2)
+        y1 = int(SCREEN_HEIGHT * 5 / 8)
+        y2 = int(SCREEN_HEIGHT * 6 / 8)
         if self.choice == 0:
             self.draw_text(x1, y1, "再来一次", chosen=True)
             self.draw_text(x2, y2, "退出游戏")

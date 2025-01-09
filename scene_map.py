@@ -69,7 +69,7 @@ def get_grid() -> pygame.Surface:
     return result
 
 #positions根据array和pos返回所有square的坐标
-def positions(squareset: dict) -> Generator:
+def positions(squareset: Squareset) -> Generator:
     max_x, max_y = squareset.array.shape
     for x in range(max_x):
         for y in range(max_y):
@@ -140,13 +140,15 @@ class SceneMap(SceneBase):
         return max(5, DIFFICULTY - self.score)
 
     def display_score(self) -> None:
-        x = SCREEN_WIDTH * 5 / 6
-        y1 = SCREEN_HEIGHT * 1 / 6
+        x = int(SCREEN_WIDTH * 5 / 6)
+        y1 = int(SCREEN_HEIGHT * 1 / 6)
         y2 = y1 + 50
         self.draw_text(x, y1, f"得分：{self.score}")
         self.draw_text(x, y2, f"最高分：{self.best_score}")
 
     def direct_land(self) -> None:
+        former_squares = copy.deepcopy(self.squares)
+        former_squareset = copy.copy(self.squareset)
         while not yuejie_or_chonghe(self.squares):
             former_squares = copy.deepcopy(self.squares)
             former_squareset = copy.copy(self.squareset)
@@ -180,7 +182,7 @@ class SceneMap(SceneBase):
         self.squares = [s for s in self.squares if not s.dropping]
 
         for position in positions(self.squareset):
-            self.create_square(*position, self.squareset.color)
+            self.create_square(position[0], position[1], self.squareset.color)
 
     def create_squareset(self) -> None:
         #随机位置，随机形状，随机颜色
@@ -193,7 +195,7 @@ class SceneMap(SceneBase):
         self.squareset = Squareset(x, y, color, array)
 
         for position in positions(self.squareset):
-            self.create_square(*position, color)
+            self.create_square(position[0], position[1], color)
         
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
