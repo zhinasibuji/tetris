@@ -90,6 +90,8 @@ class SceneMap(SceneBase):
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
         pygame.draw.rect(screen, color, square_rect)
 
+###########################################################################
+
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
             self.drop_or_land()
@@ -223,6 +225,8 @@ class SceneMap(SceneBase):
 
     def yuejie_or_chonghe(self) -> bool:
         return any(s.yuejie() for s in self.squares) or self.chonghe()
+    
+###########################################################################
 
     def input_process(self) -> None:
         for event in pygame.event.get():
