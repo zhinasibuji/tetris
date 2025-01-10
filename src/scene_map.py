@@ -172,7 +172,7 @@ class SceneMap(SceneBase):
 
     def save_best_score(self) -> None:
         if self.score > self.best_score:
-            with open("save", "wb") as file:
+            with open("score.save", "wb") as file:
                 pickle.dump(self.score, file)
 
     def drop_or_land(self) -> None:
@@ -193,11 +193,11 @@ class SceneMap(SceneBase):
         return max(5, DIFFICULTY - self.score)
 
     def get_best_score(self) -> int:
-        if os.path.exists("save"):
-            with open("save", "rb") as file:
+        if os.path.exists("score.save"):
+            with open("score.save", "rb") as file:
                 return pickle.load(file)
         else:
-            with open("save", "wb") as file:
+            with open("score.save", "wb") as file:
                 pickle.dump(0, file)
             return 0
         
