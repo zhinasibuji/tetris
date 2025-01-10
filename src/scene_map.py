@@ -48,7 +48,7 @@ class Square:
     def __eq__(self, other) -> bool:
         return self.x == other.x and self.y == other.y
 
-    def yuejie(self) -> bool:
+    def is_yuejie(self) -> bool:
         return self.y not in range(MAP_HEIGHT) or \
                self.x not in range(MAP_WIDTH)
 
@@ -191,7 +191,7 @@ class SceneMap(SceneBase):
 
     def get_difficulty(self) -> int:
         return max(5, DIFFICULTY - self.score)
-        
+
     def get_best_score(self) -> int:
         if os.path.exists("save.json"):
             with open("save.json", "r") as file:
