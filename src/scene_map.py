@@ -197,7 +197,7 @@ class SceneMap(SceneBase):
             with open("save", "rb") as file:
                 return pickle.load(file)
         else:
-            with open("save.json", "wb") as file:
+            with open("save", "wb") as file:
                 pickle.dump(0, file)
             return 0
         
