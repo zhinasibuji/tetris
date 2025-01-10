@@ -71,26 +71,24 @@ class SceneMap(SceneBase):
 
     def draw(self) -> None:
         screen.fill(BLACK)
-        self.display_map()
+        self.draw_map()
         screen.blit(self.grid, (0, 0))
-        self.display_score()
+        self.draw_score()
 
-    def display_map(self) -> None:
+    def draw_map(self) -> None:
         for square in self.squares:
-            self.display_square(square.x, square.y, square.color)
+            self.draw_square(square.x, square.y, square.color)
 
-    def display_score(self) -> None:
+    def draw_score(self) -> None:
         x = int(SCREEN_WIDTH * 5 / 6)
         y1 = int(SCREEN_HEIGHT * 1 / 6)
         y2 = y1 + 50
         self.draw_text(x, y1, f"得分：{self.score}")
         self.draw_text(x, y2, f"最高分：{self.best_score}")
         
-    def display_square(self, x: int, y: int, color:tuple) -> None:
+    def draw_square(self, x: int, y: int, color:tuple) -> None:
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
         pygame.draw.rect(screen, color, square_rect)
-
-###########################################################################
 
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
@@ -226,7 +224,6 @@ class SceneMap(SceneBase):
     def yuejie_or_chonghe(self) -> bool:
         return any(s.yuejie() for s in self.squares) or self.chonghe()
     
-###########################################################################
 
     def input_process(self) -> None:
         for event in pygame.event.get():
