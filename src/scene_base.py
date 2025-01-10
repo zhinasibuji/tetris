@@ -3,6 +3,7 @@ from configs import *
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("俄罗斯方块")
 clock = pygame.time.Clock()
 
 big_font = pygame.font.SysFont('simhei', 64)
