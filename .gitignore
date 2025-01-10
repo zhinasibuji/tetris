@@ -1,7 +1,7 @@
 .venv
 test.py
 __pycache__
-*.spec
+game.spec
 build
 dist
-save
+*.save
