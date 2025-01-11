@@ -18,7 +18,6 @@ class SceneBase:
             self.input_process()
             self.data_process()
 
-            pygame.display.flip()
             clock.tick(60)
 
     def data_process(self) -> None:

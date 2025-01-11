@@ -11,6 +11,7 @@ class SceneTitle(SceneBase):
         screen.fill(BLACK)
         self.draw_title()
         self.draw_choices()
+        pygame.display.flip()
 
     def input_process(self) -> None:
         for event in pygame.event.get():

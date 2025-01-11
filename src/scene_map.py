@@ -75,6 +75,7 @@ class SceneMap(SceneBase):
         self.draw_map()
         screen.blit(self.grid, (0, 0))
         self.draw_score()
+        pygame.display.flip()
 
     def draw_map(self) -> None:
         for square in self.squares:
