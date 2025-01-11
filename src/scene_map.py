@@ -4,7 +4,7 @@ import copy
 import random
 from typing import Generator
 from dataclasses import dataclass
-import pickle
+import json
 import numpy as np
 from scene_base import *
 
@@ -172,8 +172,8 @@ class SceneMap(SceneBase):
 
     def save_best_score(self) -> None:
         if self.score > self.best_score:
-            with open("score.save", "wb") as file:
-                pickle.dump(self.score, file)
+            with open("save.json", "w") as file:
+                json.dump(self.score, file)
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
@@ -193,12 +193,12 @@ class SceneMap(SceneBase):
         return max(5, DIFFICULTY - self.score)
 
     def get_best_score(self) -> int:
-        if os.path.exists("score.save"):
-            with open("score.save", "rb") as file:
-                return pickle.load(file)
+        if os.path.exists("save.json"):
+            with open("save.json", "r") as file:
+                return json.load(file)
         else:
-            with open("score.save", "wb") as file:
-                pickle.dump(0, file)
+            with open("save.json", "w") as file:
+                json.dump(0, file)
             return 0
         
     def get_grid(self) -> pygame.Surface:
