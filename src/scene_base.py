@@ -17,7 +17,6 @@ class SceneBase:
         while self.next_scene is None:
             self.input_process()
             self.data_process()
-            self.draw()
 
             pygame.display.flip()
             clock.tick(60)
@@ -25,7 +24,7 @@ class SceneBase:
     def data_process(self) -> None:
         pass
 
-    def draw(self) -> None:
+    def update_screen(self) -> None:
         pass
 
     def input_process(self) -> None:

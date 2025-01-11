@@ -68,8 +68,9 @@ class SceneMap(SceneBase):
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
+        self.update_screen()
 
-    def draw(self) -> None:
+    def update_screen(self) -> None:
         screen.fill(BLACK)
         self.draw_map()
         screen.blit(self.grid, (0, 0))
@@ -93,6 +94,7 @@ class SceneMap(SceneBase):
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
             self.drop_or_land()
+            self.update_screen()
             self.frame_count = 0
         self.frame_count += 1
 
@@ -222,7 +224,7 @@ class SceneMap(SceneBase):
         return len(self.squares) != len(set(self.squares))
 
     def is_yuejie_or_chonghe(self) -> bool:
-        return any(s.yuejie() for s in self.squares) or self.is_chonghe()
+        return any(s.is_yuejie() for s in self.squares) or self.is_chonghe()
     
     def input_process(self) -> None:
         for event in pygame.event.get():
@@ -231,6 +233,7 @@ class SceneMap(SceneBase):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
+                self.update_screen()
 
     def keyboard_process(self, key: int) -> None:
         former_squares = copy.deepcopy(self.squares)
@@ -250,6 +253,7 @@ class SceneMap(SceneBase):
 
         if self.is_yuejie_or_chonghe():
             self.squares, self.squareset = former_squares, former_squareset
+        
 
 
 if __name__ == '__main__':

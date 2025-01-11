@@ -4,4 +4,4 @@ __pycache__
 game.spec
 build
 dist
-*.save
+save.json

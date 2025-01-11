@@ -5,8 +5,9 @@ class SceneGameover(SceneBase):
     def __init__(self) -> None:
         super().__init__()
         self.choice = 0
+        self.update_screen()
 
-    def draw(self) -> None:
+    def update_screen(self) -> None:
         screen.fill(BLACK)
         self.draw_gameover()
         self.draw_choices()
@@ -22,8 +23,10 @@ class SceneGameover(SceneBase):
         from scene_map import SceneMap
         if key == pygame.K_UP:
             self.choice = max(0, self.choice - 1)
+            self.update_screen()
         elif key == pygame.K_DOWN:
             self.choice = min(1, self.choice + 1)
+            self.update_screen()
         if key == pygame.K_SPACE:
             if self.choice == 0:
                 self.next_scene = SceneMap()
