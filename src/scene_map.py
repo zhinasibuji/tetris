@@ -215,9 +215,9 @@ class SceneMap(SceneBase):
 
     # positions根据array和pos返回所有square的坐标
     def get_positions(self) -> Generator:
-        max_x, max_y = self.squareset.array.shape
-        for x in range(max_x):
-            for y in range(max_y):
+        array_width = self.squareset.array.shape[0]
+        for x in range(array_width):
+            for y in range(array_width):
                 if self.squareset.array[y][x]:
                     yield (x + self.squareset.x, y + self.squareset.y)
 
