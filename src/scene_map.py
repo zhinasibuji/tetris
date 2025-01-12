@@ -138,10 +138,9 @@ class SceneMap(SceneBase):
         array = random.choice(ARRAYS)
         array_width = array.shape[0]
         x = random.randint(0, MAP_WIDTH - array_width)
-        y = 0
         color = random.choice((RED, GREEN, BLUE))
 
-        self.squareset = Squareset(x, y, color, array)
+        self.squareset = Squareset(x, 0, color, array)
 
         for position in self.get_positions():
             self.create_square(position[0], position[1], color)
