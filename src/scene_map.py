@@ -116,13 +116,16 @@ class SceneMap(SceneBase):
 
     def direct_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
-        former_squareset = copy.copy(self.squareset)
+        former_squareset_x = self.squareset.x
+        former_squareset_y = self.squareset.y
         while not self.is_yuejie_or_chonghe():
             former_squares = copy.deepcopy(self.squares)
             former_squareset = copy.copy(self.squareset)
             self.squareset_down()
             self.squareset.y += 1
-        self.squares, self.squareset = former_squares, former_squareset
+        self.squares = former_squares
+        self.squareset.x = former_squareset_x
+        self.squareset.y = former_squareset_y
         self.land()
 
     def spin(self) -> None:
@@ -237,7 +240,8 @@ class SceneMap(SceneBase):
 
     def keyboard_process(self, key: int) -> None:
         former_squares = copy.deepcopy(self.squares)
-        former_squareset = copy.copy(self.squareset)
+        former_squareset_x = self.squareset.x
+        former_squareset_y = self.squareset.y
 
         if key == pygame.K_LEFT:
             self.squareset_left()
@@ -252,7 +256,9 @@ class SceneMap(SceneBase):
             self.spin()
 
         if self.is_yuejie_or_chonghe():
-            self.squares, self.squareset = former_squares, former_squareset
+            self.squares = former_squares
+            self.squareset.x = former_squareset_x
+            self.squareset.y = former_squareset_y
         
 
 
