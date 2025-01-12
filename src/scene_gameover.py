@@ -3,9 +3,8 @@ from scene_base import *
 
 class SceneGameover(SceneBase):
     def __init__(self) -> None:
-        super().__init__()
         self.choice = 0
-        self.update_screen()
+        super().__init__()
 
     def update_screen(self) -> None:
         screen.fill(BLACK)

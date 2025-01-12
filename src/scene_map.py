@@ -53,14 +53,13 @@ class Square:
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
-        super().__init__()
         self.squares = []
         self.create_squareset()
         self.grid = self.get_grid()
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
-        self.update_screen()
+        super().__init__()
 
     def update_screen(self) -> None:
         screen.fill(BLACK)

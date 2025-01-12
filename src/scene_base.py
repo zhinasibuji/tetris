@@ -12,6 +12,10 @@ small_font = pygame.font.SysFont('simhei', 32)
 class SceneBase:
     def __init__(self) -> None:
         self.next_scene = None
+        self.update_screen()
+
+    def update_screen(self) -> None:
+        pass
     
     def call(self) -> None:
         while self.next_scene is None:
