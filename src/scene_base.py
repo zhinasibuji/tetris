@@ -23,9 +23,6 @@ class SceneBase:
     def data_process(self) -> None:
         pass
 
-    def update_screen(self) -> None:
-        pass
-
     def input_process(self) -> None:
         pass
 
