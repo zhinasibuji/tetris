@@ -53,13 +53,14 @@ class Square:
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
+        super().__init__()
         self.squares = []
         self.create_squareset()
         self.grid = self.get_grid()
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
-        super().__init__()
+        self.update_screen()
 
     def update_screen(self) -> None:
         screen.fill(BLACK)
@@ -109,12 +110,14 @@ class SceneMap(SceneBase):
         former_squares = copy.deepcopy(self.squares)
         former_squareset_x = self.squareset_x
         former_squareset_y = self.squareset_y
+
         while not self.is_yuejie_or_chonghe():
             former_squares = copy.deepcopy(self.squares)
             former_squareset_x = self.squareset_x
             former_squareset_y = self.squareset_y
             self.squareset_down()
             self.squareset_y += 1
+
         self.squares = former_squares
         self.squareset_x = former_squareset_x
         self.squareset_y = former_squareset_y
@@ -173,13 +176,13 @@ class SceneMap(SceneBase):
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
+        former_squareset_y = self.squareset_y
         self.squareset_down()
 
         if self.is_yuejie_or_chonghe():
             self.squares = former_squares
+            self.squareset_y = former_squareset_y
             self.land()
-        else:
-            self.squareset_y += 1
 
     def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
@@ -208,11 +211,8 @@ class SceneMap(SceneBase):
 
     # positions根据array和pos返回所有square的坐标
     def get_positions(self) -> Generator:
-        array_width = self.squareset_array.shape[0]
-        for x in range(array_width):
-            for y in range(array_width):
-                if self.squareset_array[y][x]:
-                    yield (x + self.squareset_x, y + self.squareset_y)
+        for x, y in zip(*np.nonzero(self.squareset_array)):
+            yield (x + self.squareset_x, y + self.squareset_y)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
