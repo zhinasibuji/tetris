@@ -35,7 +35,7 @@ class SceneTitle(SceneBase):
                 sys.exit()
 
     def draw_title(self) -> None:
-        #x居中，y约为四分之一窗口高
+        # x居中，y约为四分之一窗口高
         x = int(SCREEN_WIDTH / 2)
         y = int(SCREEN_HEIGHT / 4)
         self.draw_text(x, y, "俄罗斯方块",big=True)

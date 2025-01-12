@@ -127,14 +127,14 @@ class SceneMap(SceneBase):
 
     def spin(self) -> None:
         self.squareset.array = np.rot90(self.squareset.array)
-        #清除所有dropping_squares,根据array和pos重写之
+        # 清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
         for position in self.get_positions():
             self.create_square(position[0], position[1], self.squareset.color)
 
     def create_squareset(self) -> None:
-        #随机位置，随机形状，随机颜色
+        # 随机位置，随机形状，随机颜色
         array = random.choice(ARRAYS)
         array_width = array.shape[0]
         x = random.randint(0, MAP_WIDTH - array_width)
@@ -160,7 +160,7 @@ class SceneMap(SceneBase):
                 self.score += 1
 
     def land(self) -> None:
-        #将所有squares的dropping设为False
+        # 将所有squares的dropping设为False
         for square in self.squares:
             square.dropping = False
         self.xiaochu_manhang()
@@ -213,7 +213,7 @@ class SceneMap(SceneBase):
 
         return result
 
-    #positions根据array和pos返回所有square的坐标
+    # positions根据array和pos返回所有square的坐标
     def get_positions(self) -> Generator:
         max_x, max_y = self.squareset.array.shape
         for x in range(max_x):

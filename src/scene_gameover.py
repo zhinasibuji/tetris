@@ -35,7 +35,7 @@ class SceneGameover(SceneBase):
                 sys.exit()
 
     def draw_gameover(self) -> None:
-        #x居中，y约为四分之一窗口高
+        # x居中，y约为四分之一窗口高
         x = int(SCREEN_WIDTH / 2)
         y = int(SCREEN_HEIGHT / 4)
         self.draw_text(x, y, "游戏失败", big = True)
