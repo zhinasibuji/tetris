@@ -3,7 +3,6 @@ import sys
 import copy
 import random
 from typing import Generator
-from dataclasses import dataclass
 import json
 import numpy as np
 from scene_base import *
@@ -51,13 +50,6 @@ class Square:
     def is_yuejie(self) -> bool:
         return self.y not in range(MAP_HEIGHT) or \
                self.x not in range(MAP_WIDTH)
-
-@dataclass
-class Squareset:
-    x: int
-    y: int
-    color: tuple
-    array: np.ndarray
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
@@ -116,37 +108,37 @@ class SceneMap(SceneBase):
 
     def direct_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
-        former_squareset_x = self.squareset.x
-        former_squareset_y = self.squareset.y
+        former_squareset_x = self.squareset_x
+        former_squareset_y = self.squareset_y
         while not self.is_yuejie_or_chonghe():
             former_squares = copy.deepcopy(self.squares)
-            former_squareset = copy.copy(self.squareset)
+            former_squareset_x = self.squareset_x
+            former_squareset_y = self.squareset_y
             self.squareset_down()
-            self.squareset.y += 1
+            self.squareset_y += 1
         self.squares = former_squares
-        self.squareset.x = former_squareset_x
-        self.squareset.y = former_squareset_y
+        self.squareset_x = former_squareset_x
+        self.squareset_y = former_squareset_y
         self.land()
 
     def spin(self) -> None:
-        self.squareset.array = np.rot90(self.squareset.array)
+        self.squareset_array = np.rot90(self.squareset_array)
         # 清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
         for position in self.get_positions():
-            self.create_square(position[0], position[1], self.squareset.color)
+            self.create_square(position[0], position[1], self.squareset_color)
 
     def create_squareset(self) -> None:
         # 随机位置，随机形状，随机颜色
-        array = random.choice(ARRAYS)
-        array_width = array.shape[0]
-        x = random.randint(0, MAP_WIDTH - array_width)
-        color = random.choice((RED, GREEN, BLUE))
-
-        self.squareset = Squareset(x, 0, color, array)
+        self.squareset_array = random.choice(ARRAYS)
+        array_width = self.squareset_array.shape[0]
+        self.squareset_x = random.randint(0, MAP_WIDTH - array_width)
+        self.squareset_y = 0
+        self.squareset_color = random.choice((RED, GREEN, BLUE))
 
         for position in self.get_positions():
-            self.create_square(position[0], position[1], color)
+            self.create_square(position[0], position[1], self.squareset_color)
         
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
@@ -188,7 +180,7 @@ class SceneMap(SceneBase):
             self.squares = former_squares
             self.land()
         else:
-            self.squareset.y += 1
+            self.squareset_y += 1
 
     def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
@@ -217,11 +209,11 @@ class SceneMap(SceneBase):
 
     # positions根据array和pos返回所有square的坐标
     def get_positions(self) -> Generator:
-        array_width = self.squareset.array.shape[0]
+        array_width = self.squareset_array.shape[0]
         for x in range(array_width):
             for y in range(array_width):
-                if self.squareset.array[y][x]:
-                    yield (x + self.squareset.x, y + self.squareset.y)
+                if self.squareset_array[y][x]:
+                    yield (x + self.squareset_x, y + self.squareset_y)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
@@ -240,15 +232,15 @@ class SceneMap(SceneBase):
 
     def keyboard_process(self, key: int) -> None:
         former_squares = copy.deepcopy(self.squares)
-        former_squareset_x = self.squareset.x
-        former_squareset_y = self.squareset.y
+        former_squareset_x = self.squareset_x
+        former_squareset_y = self.squareset_y
 
         if key == pygame.K_LEFT:
             self.squareset_left()
-            self.squareset.x -= 1
+            self.squareset_x -= 1
         elif key == pygame.K_RIGHT:
             self.squareset_right()
-            self.squareset.x += 1
+            self.squareset_x += 1
         elif key == pygame.K_DOWN:
             self.direct_land()
             return
@@ -257,8 +249,8 @@ class SceneMap(SceneBase):
 
         if self.is_yuejie_or_chonghe():
             self.squares = former_squares
-            self.squareset.x = former_squareset_x
-            self.squareset.y = former_squareset_y
+            self.squareset_x = former_squareset_x
+            self.squareset_y = former_squareset_y
         
 
 
