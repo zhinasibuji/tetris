@@ -1,11 +1,13 @@
-## 操作说明
+[English](https://github.com/zhinasibuji/tetris/) [简体中文](README-CN.md)
 
-左右键移动，下键快速落地，空格键确认、旋转。
+## Instructions
 
-## 如何运行？
+The left and right keys move, the down button quickly lands on the ground, and the spacebar confirms and rotates.
 
-    python main.py
+## How does it work?
 
-## 环境依赖
+    python src/main.py
 
-python解释器，numpy和pygame库。
+## Environment dependencies
+
+Python interpreter, numpy and pygame libraries.

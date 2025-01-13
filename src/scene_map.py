@@ -108,19 +108,15 @@ class SceneMap(SceneBase):
                 s.x += 1
 
     def direct_land(self) -> None:
-        former_squares = copy.deepcopy(self.squares)
-        former_squareset_x = self.squareset_x
-        former_squareset_y = self.squareset_y
-
-        while not self.is_yuejie_or_chonghe():
+        while True:
             former_squares = copy.deepcopy(self.squares)
-            former_squareset_x = self.squareset_x
             former_squareset_y = self.squareset_y
             self.squareset_down()
             self.squareset_y += 1
+            if not self.is_yuejie_or_chonghe():
+                break
 
         self.squares = former_squares
-        self.squareset_x = former_squareset_x
         self.squareset_y = former_squareset_y
         self.land()
 
