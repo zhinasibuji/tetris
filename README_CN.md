@@ -1,4 +1,4 @@
-[English](https://github.com/zhinasibuji/tetris/) [简体中文](https://github.com/zhinasibuji/tetris/blob/master/README_CN.md)
+[English](https://github.com/zhinasibuji/tetris/) [简体中文](master/README_CN.md)
 
 ## 操作说明
 
