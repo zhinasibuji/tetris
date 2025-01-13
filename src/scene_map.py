@@ -113,7 +113,7 @@ class SceneMap(SceneBase):
             former_squareset_y = self.squareset_y
             self.squareset_down()
             self.squareset_y += 1
-            if not self.is_yuejie_or_chonghe():
+            if self.is_yuejie_or_chonghe():
                 break
 
         self.squares = former_squares
@@ -147,8 +147,9 @@ class SceneMap(SceneBase):
 
     def xiaochu_manhang(self) -> None:
         for line in range(MAP_HEIGHT):
-            ls = [s for s in self.squares if s.y == line]
-            if len(ls) == MAP_WIDTH:
+            # 这一行的方块数
+            square_num = sum(s.y == line for s in self.squares)
+            if square_num == MAP_WIDTH:
                 self.xiaochu_benhang(line)
                 self.score += 1
 
