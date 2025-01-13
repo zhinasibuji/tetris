@@ -1,7 +1,7 @@
-import os
 import sys
 import copy
 import random
+from pathlib import Path
 from typing import Generator
 import json
 import numpy as np
@@ -54,6 +54,7 @@ class Square:
 class SceneMap(SceneBase):
     def __init__(self) -> None:
         super().__init__()
+        self.savefile_path = Path("save.json")
         self.squares = []
         self.create_squareset()
         self.grid = self.get_grid()
@@ -171,7 +172,7 @@ class SceneMap(SceneBase):
 
     def save_best_score(self) -> None:
         if self.score > self.best_score:
-            with open("save.json", "w") as file:
+            with open(self.savefile_path, "w") as file:
                 json.dump(self.score, file)
 
     def drop_or_land(self) -> None:
@@ -192,11 +193,11 @@ class SceneMap(SceneBase):
         return max(5, DIFFICULTY - self.score)
 
     def get_best_score(self) -> int:
-        if os.path.exists("save.json"):
-            with open("save.json", "r") as file:
+        if self.savefile_path.exists():
+            with open(self.savefile_path, "r") as file:
                 return json.load(file)
         else:
-            with open("save.json", "w") as file:
+            with open(self.savefile_path, "w") as file:
                 json.dump(0, file)
             return 0
         
