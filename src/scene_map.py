@@ -96,23 +96,25 @@ class SceneMap(SceneBase):
         for s in self.squares:
             if s.dropping:
                 s.y += 1
+        self.squareset_y += 1
     
     def squareset_left(self) -> None:
         for s in self.squares:
             if s.dropping:
                 s.x -= 1
+        self.squareset_x -= 1
 
     def squareset_right(self) -> None:
         for s in self.squares:
             if s.dropping:
                 s.x += 1
+        self.squareset_x += 1
 
     def direct_land(self) -> None:
         while True:
             former_squares = copy.deepcopy(self.squares)
             former_squareset_y = self.squareset_y
             self.squareset_down()
-            self.squareset_y += 1
             if self.is_yuejie_or_chonghe():
                 break
 
@@ -234,10 +236,8 @@ class SceneMap(SceneBase):
 
         if key == pygame.K_LEFT:
             self.squareset_left()
-            self.squareset_x -= 1
         elif key == pygame.K_RIGHT:
             self.squareset_right()
-            self.squareset_x += 1
         elif key == pygame.K_DOWN:
             self.direct_land()
             return
