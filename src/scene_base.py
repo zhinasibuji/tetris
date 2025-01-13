@@ -6,8 +6,32 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("俄罗斯方块")
 clock = pygame.time.Clock()
 
-big_font = pygame.font.SysFont('simhei', 64)
-small_font = pygame.font.SysFont('simhei', 32)
+if "simhei" in pygame.font.get_fonts():
+    LANGUAGE = "zh"
+    big_font = pygame.font.SysFont('simhei', 64)
+    small_font = pygame.font.SysFont('simhei', 32)
+else:
+    LANGUAGE = "en"
+    default_font = pygame.font.get_default_font()
+    big_font = pygame.font.SysFont(default_font, 64)
+    small_font = pygame.font.SysFont(default_font, 32)
+
+if LANGUAGE == "zh":
+    GAMEOVER = "游戏失败"
+    AGAIN = "再来一次"
+    EXIT = "退出游戏"
+    TETRIS = "俄罗斯方块"
+    START = "开始游戏"
+    SCORE = "得分："
+    HIGH_SCORE = "最高分："
+elif LANGUAGE == "en":
+    GAMEOVER = "GAMEOVER"
+    AGAIN = "AGAIN"
+    EXIT = "EXIT"
+    TETRIS = "TETRIS"
+    START = "START"
+    SCORE = "SCORE: "
+    HIGH_SCORE = "HIGH_SCORE: "
 
 class SceneBase:
     def __init__(self) -> None:

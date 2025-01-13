@@ -78,8 +78,8 @@ class SceneMap(SceneBase):
         x = int(SCREEN_WIDTH * 5 / 6)
         y1 = int(SCREEN_HEIGHT * 1 / 6)
         y2 = y1 + 50
-        self.draw_text(x, y1, f"得分：{self.score}")
-        self.draw_text(x, y2, f"最高分：{self.best_score}")
+        self.draw_text(x, y1, SCORE + str(self.score))
+        self.draw_text(x, y2, HIGH_SCORE + str(self.best_score))
         
     def draw_square(self, x: int, y: int, color:tuple) -> None:
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
