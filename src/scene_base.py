@@ -15,23 +15,17 @@ FPS = 60
 DIFFICULTY = 30#初始难度，多少帧下降一次，越大难度越低
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
+FONTS = ("simhei", "notosanscjksc")
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("俄罗斯方块")
 clock = pygame.time.Clock()
 
-if "simhei" in pygame.font.get_fonts():
-    LANGUAGE = "zh"
-    big_font = pygame.font.SysFont('simhei', 64)
-    small_font = pygame.font.SysFont('simhei', 32)
-else:
-    LANGUAGE = "en"
-    default_font = pygame.font.get_default_font()
-    big_font = pygame.font.SysFont(default_font, 64)
-    small_font = pygame.font.SysFont(default_font, 32)
+big_font = pygame.font.SysFont(FONTS, 64)
+small_font = pygame.font.SysFont(FONTS, 32)
 
-if LANGUAGE == "zh":
+if pygame.font.match_font(FONTS):
     GAMEOVER = "游戏失败"
     AGAIN = "再来一次"
     EXIT = "退出游戏"
@@ -39,7 +33,7 @@ if LANGUAGE == "zh":
     START = "开始游戏"
     SCORE = "得分："
     HIGH_SCORE = "最高分："
-elif LANGUAGE == "en":
+else:
     GAMEOVER = "GAMEOVER"
     AGAIN = "AGAIN"
     EXIT = "EXIT"
