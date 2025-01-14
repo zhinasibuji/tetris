@@ -55,11 +55,11 @@ class SceneMap(SceneBase):
         super().__init__()
         self.savefile_path = Path("save.json")
         self.squares = []
-        self.create_squareset()
         self.grid = self.get_grid()
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
+        self.create_squareset()
         self.update_screen()
 
     def update_screen(self) -> None:
