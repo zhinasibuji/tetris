@@ -4,34 +4,33 @@ import random
 from pathlib import Path
 from typing import Generator
 import json
-import numpy as np
 from scene_base import *
 
-ARRAY_I = np.array(
-    [[0, 0, 1, 0],
-     [0, 0, 1, 0],
-     [0, 0, 1, 0],
-     [0, 0, 1, 0]]
-)
-ARRAY_O = np.array(
-    [[1, 1],
-     [1, 1]]
-)
-ARRAY_J = np.array(
-    [[0, 0, 1],
-     [0, 0, 1],
-     [0, 1, 1]]
-)
-ARRAY_L = np.array(
-    [[1, 0, 0],
-     [1, 0, 0],
-     [1, 1, 0]]
-)
-ARRAY_T = np.array(
-    [[1, 1, 1],
-     [0, 1, 0],
-     [0, 0, 0]]
-)
+ARRAY_I = [
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
+]
+ARRAY_O = [
+    [1, 1],
+    [1, 1],
+]
+ARRAY_J = [
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 1, 1],
+]
+ARRAY_L = [
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 1, 0],
+]
+ARRAY_T = [
+    [1, 1, 1],
+    [0, 1, 0],
+    [0, 0, 0],
+]
 ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
 class Square:
@@ -122,8 +121,11 @@ class SceneMap(SceneBase):
         self.squareset_y = former_squareset_y
         self.land()
 
+    def rot90(self, array) -> list:
+        return list(zip(*array[::-1]))
+
     def spin(self) -> None:
-        self.squareset_array = np.rot90(self.squareset_array)
+        self.squareset_array = self.rot90(self.squareset_array)
         # 清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
@@ -133,7 +135,7 @@ class SceneMap(SceneBase):
     def create_squareset(self) -> None:
         # 随机位置，随机形状，随机颜色
         self.squareset_array = random.choice(ARRAYS)
-        array_width = self.squareset_array.shape[0]
+        array_width = len(self.squareset_array)
         self.squareset_x = random.randint(0, MAP_WIDTH - array_width)
         self.squareset_y = 0
         self.squareset_color = random.choice((RED, GREEN, BLUE))
@@ -211,8 +213,11 @@ class SceneMap(SceneBase):
 
     # positions根据array和pos返回所有square的坐标
     def get_positions(self) -> Generator:
-        for x, y in zip(*np.nonzero(self.squareset_array)):
-            yield (x + self.squareset_x, y + self.squareset_y)
+        array_width = len(self.squareset_array)
+        for x in range(0, array_width):
+            for y in range(0, array_width):
+                if self.squareset_array[y][x]:
+                    yield (x + self.squareset_x, y + self.squareset_y)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
