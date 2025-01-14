@@ -129,8 +129,7 @@ class SceneMap(SceneBase):
         # 清除所有dropping_squares,根据array和pos重写之
         self.squares = [s for s in self.squares if not s.dropping]
 
-        for position in self.get_positions():
-            self.create_square(position[0], position[1], self.squareset_color)
+        self.put_squareset_into_squares()
 
     def create_squareset(self) -> None:
         # 随机位置，随机形状，随机颜色
@@ -140,8 +139,7 @@ class SceneMap(SceneBase):
         self.squareset_y = 0
         self.squareset_color = random.choice((RED, GREEN, BLUE))
 
-        for position in self.get_positions():
-            self.create_square(position[0], position[1], self.squareset_color)
+        self.put_squareset_into_squares()
         
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
@@ -212,12 +210,12 @@ class SceneMap(SceneBase):
         return result
 
     # positions根据array和pos返回所有square的坐标
-    def get_positions(self) -> Generator:
+    def put_squareset_into_squares(self) -> None:
         array_width = len(self.squareset_array)
         for x in range(0, array_width):
             for y in range(0, array_width):
                 if self.squareset_array[y][x]:
-                    yield (x + self.squareset_x, y + self.squareset_y)
+                    self.create_square(x + self.squareset_x, y + self.squareset_y, self.squareset_color)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
