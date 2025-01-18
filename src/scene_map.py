@@ -2,7 +2,6 @@ import sys
 import copy
 import random
 from pathlib import Path
-from typing import Generator
 import json
 from scene_base import *
 
