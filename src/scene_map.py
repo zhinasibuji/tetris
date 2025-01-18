@@ -112,7 +112,7 @@ class SceneMap(SceneBase):
             former_squares = copy.deepcopy(self.squares)
             former_squareset_y = self.squareset_y
             self.squareset_down()
-            if self.is_yuejie_or_chonghe():
+            if self.is_yuejie() or self.is_chonghe():
                 break
 
         self.squares = former_squares
@@ -177,7 +177,7 @@ class SceneMap(SceneBase):
         former_squareset_y = self.squareset_y
         self.squareset_down()
 
-        if self.is_yuejie_or_chonghe():
+        if self.is_yuejie() or self.is_chonghe():
             self.squares = former_squares
             self.squareset_y = former_squareset_y
             self.land()
@@ -211,7 +211,6 @@ class SceneMap(SceneBase):
 
         return result
 
-    # positions根据array和pos返回所有square的坐标
     def put_squareset_into_squares(self) -> None:
         for x, line in enumerate(self.squareset_array):
             for y, num in enumerate(line):
@@ -219,9 +218,6 @@ class SceneMap(SceneBase):
                     self.create_square(x + self.squareset_x, 
                                        y + self.squareset_y, 
                                        self.squareset_color)
-
-    def is_yuejie_or_chonghe(self) -> bool:
-        return self.is_yuejie() or self.is_chonghe()
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
@@ -253,7 +249,7 @@ class SceneMap(SceneBase):
         elif key == pygame.K_SPACE:
             self.spin()
 
-        if self.is_yuejie_or_chonghe():
+        if self.is_yuejie() or self.is_chonghe():
             self.squares = former_squares
             self.squareset_x = former_squareset_x
             self.squareset_y = former_squareset_y
