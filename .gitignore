@@ -1,4 +1,4 @@
-.venv
+winvenv
 test.py
 __pycache__
 game.spec
