@@ -211,10 +211,9 @@ class SceneMap(SceneBase):
 
     # positions根据array和pos返回所有square的坐标
     def put_squareset_into_squares(self) -> None:
-        array_width = len(self.squareset_array)
-        for x in range(0, array_width):
-            for y in range(0, array_width):
-                if self.squareset_array[y][x]:
+        for x, line in enumerate(self.squareset_array):
+            for y, num in enumerate(line):
+                if num == 1:
                     self.create_square(x + self.squareset_x, y + self.squareset_y, self.squareset_color)
 
     def is_chonghe(self) -> bool:
