@@ -200,11 +200,15 @@ class SceneMap(SceneBase):
             return 0
         
     def get_grid(self) -> pygame.Surface:
-        result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags = pygame.SRCALPHA)
+        result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), 
+                                flags = pygame.SRCALPHA)
         for x in range(0, MAP_WIDTH):
             for y in range(0, MAP_HEIGHT):
-                square_rect = pygame.Rect(x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
-                pygame.draw.rect(result, WHITE, square_rect, width=LINE_THICKNESS)
+                square_rect = pygame.Rect(x * SQUARE_SIZE, 
+                                          y * SQUARE_SIZE, 
+                                          SQUARE_SIZE, SQUARE_SIZE)
+                pygame.draw.rect(result, WHITE, square_rect, 
+                                 width=LINE_THICKNESS)
 
         return result
 
@@ -213,7 +217,9 @@ class SceneMap(SceneBase):
         for x, line in enumerate(self.squareset_array):
             for y, num in enumerate(line):
                 if num == 1:
-                    self.create_square(x + self.squareset_x, y + self.squareset_y, self.squareset_color)
+                    self.create_square(x + self.squareset_x, 
+                                       y + self.squareset_y, 
+                                       self.squareset_color)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
