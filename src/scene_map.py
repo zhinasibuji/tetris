@@ -1,7 +1,6 @@
 import sys
 import copy
 import random
-from pathlib import Path
 import json
 from scene_base import *
 
@@ -52,7 +51,7 @@ class Square:
 class SceneMap(SceneBase):
     def __init__(self) -> None:
         super().__init__()
-        self.savefile_path = Path("save.json")
+        self.savefile_path = "save.json"
         self.squares = []
         self.grid = self.get_grid()
         self.frame_count = 0
@@ -191,10 +190,10 @@ class SceneMap(SceneBase):
         return max(5, DIFFICULTY - self.score)
 
     def get_best_score(self) -> int:
-        if self.savefile_path.exists():
+        try:
             with open(self.savefile_path, "r") as file:
                 return json.load(file)
-        else:
+        except FileNotFoundError:
             with open(self.savefile_path, "w") as file:
                 json.dump(0, file)
             return 0
