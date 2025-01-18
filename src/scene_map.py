@@ -220,11 +220,14 @@ class SceneMap(SceneBase):
                                        y + self.squareset_y, 
                                        self.squareset_color)
 
+    def is_yuejie_or_chonghe(self) -> bool:
+        return self.is_yuejie() or self.is_chonghe()
+
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
 
-    def is_yuejie_or_chonghe(self) -> bool:
-        return any(s.is_yuejie() for s in self.squares) or self.is_chonghe()
+    def is_yuejie(self) -> bool:
+        return any(s.is_yuejie() for s in self.squares)
     
     def input_process(self) -> None:
         for event in pygame.event.get():
