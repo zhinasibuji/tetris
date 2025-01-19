@@ -31,6 +31,7 @@ ARRAY_T = [
 ]
 ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
+
 class Square:
     def __init__(self, x: int, y: int, color: tuple) -> None:
         self.dropping = True
@@ -40,13 +41,14 @@ class Square:
 
     def __hash__(self) -> int:
         return hash((self.x, self.y))
-    
+
     def __eq__(self, other) -> bool:
         return self.x == other.x and self.y == other.y
 
     def is_yuejie(self) -> bool:
         return self.y not in range(MAP_HEIGHT) or \
-               self.x not in range(MAP_WIDTH)
+            self.x not in range(MAP_WIDTH)
+
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
@@ -77,8 +79,8 @@ class SceneMap(SceneBase):
         y2 = y1 + 50
         self.draw_text(x, y1, SCORE + str(self.score))
         self.draw_text(x, y2, HIGH_SCORE + str(self.best_score))
-        
-    def draw_square(self, x: int, y: int, color:tuple) -> None:
+
+    def draw_square(self, x: int, y: int, color: tuple) -> None:
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
         pygame.draw.rect(screen, color, square_rect)
 
@@ -94,7 +96,7 @@ class SceneMap(SceneBase):
             if s.dropping:
                 s.y += 1
         self.squareset_y += 1
-    
+
     def squareset_left(self) -> None:
         for s in self.squares:
             if s.dropping:
@@ -138,7 +140,7 @@ class SceneMap(SceneBase):
         self.squareset_color = random.choice((RED, GREEN, BLUE))
 
         self.put_squareset_into_squares()
-        
+
     def xiaochu_benhang(self, line: int) -> None:
         self.squares = [s for s in self.squares if s.y != line]
         for s in self.squares:
@@ -197,16 +199,16 @@ class SceneMap(SceneBase):
             with open(self.savefile_path, "w") as file:
                 json.dump(0, file)
             return 0
-        
+
     def get_grid(self) -> pygame.Surface:
-        result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), 
-                                flags = pygame.SRCALPHA)
+        result = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT),
+                                flags=pygame.SRCALPHA)
         for x in range(0, MAP_WIDTH):
             for y in range(0, MAP_HEIGHT):
-                square_rect = pygame.Rect(x * SQUARE_SIZE, 
-                                          y * SQUARE_SIZE, 
+                square_rect = pygame.Rect(x * SQUARE_SIZE,
+                                          y * SQUARE_SIZE,
                                           SQUARE_SIZE, SQUARE_SIZE)
-                pygame.draw.rect(result, WHITE, square_rect, 
+                pygame.draw.rect(result, WHITE, square_rect,
                                  width=LINE_THICKNESS)
 
         return result
@@ -215,8 +217,8 @@ class SceneMap(SceneBase):
         for x, line in enumerate(self.squareset_array):
             for y, num in enumerate(line):
                 if num == 1:
-                    self.create_square(x + self.squareset_x, 
-                                       y + self.squareset_y, 
+                    self.create_square(x + self.squareset_x,
+                                       y + self.squareset_y,
                                        self.squareset_color)
 
     def is_chonghe(self) -> bool:
@@ -224,7 +226,7 @@ class SceneMap(SceneBase):
 
     def is_yuejie(self) -> bool:
         return any(s.is_yuejie() for s in self.squares)
-    
+
     def input_process(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -253,7 +255,6 @@ class SceneMap(SceneBase):
             self.squares = former_squares
             self.squareset_x = former_squareset_x
             self.squareset_y = former_squareset_y
-        
 
 
 if __name__ == '__main__':

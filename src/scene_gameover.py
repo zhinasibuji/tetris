@@ -1,6 +1,7 @@
 import sys
 from scene_base import *
 
+
 class SceneGameover(SceneBase):
     def __init__(self) -> None:
         super().__init__()
@@ -38,7 +39,7 @@ class SceneGameover(SceneBase):
         # x居中，y约为四分之一窗口高
         x = int(SCREEN_WIDTH / 2)
         y = int(SCREEN_HEIGHT / 4)
-        self.draw_text(x, y, GAMEOVER, big = True)
+        self.draw_text(x, y, GAMEOVER, big=True)
 
     def draw_choices(self) -> None:
         x1 = x2 = int(SCREEN_WIDTH / 2)

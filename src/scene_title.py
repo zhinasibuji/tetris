@@ -1,6 +1,7 @@
 import sys
 from scene_base import *
 
+
 class SceneTitle(SceneBase):
     def __init__(self) -> None:
         super().__init__()

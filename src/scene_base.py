@@ -11,7 +11,7 @@ SQUARE_SIZE = 20
 MAP_HEIGHT = 30
 MAP_WIDTH = 20
 LINE_THICKNESS = 1
-DIFFICULTY = 30#初始难度，多少帧下降一次，越大难度越低
+DIFFICULTY = 30  # 初始难度，多少帧下降一次，越大难度越低
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 FONTS = ("simhei", "notosanscjksc")
@@ -41,10 +41,11 @@ else:
     SCORE = "SCORE: "
     HIGH_SCORE = "HIGH_SCORE: "
 
+
 class SceneBase:
     def __init__(self) -> None:
         self.next_scene = None
-    
+
     def call(self) -> None:
         while self.next_scene is None:
             self.input_process()
