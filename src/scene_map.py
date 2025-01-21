@@ -60,7 +60,6 @@ class SceneMap(SceneBase):
         self.score = 0
         self.best_score = self.get_best_score()
         self.create_squareset()
-        self.update_screen()
 
     def update_screen(self) -> None:
         screen.fill(BLACK)
@@ -87,9 +86,9 @@ class SceneMap(SceneBase):
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
             self.drop_or_land()
-            self.update_screen()
             self.frame_count = 0
         self.frame_count += 1
+        self.update_screen()
 
     def squareset_down(self) -> None:
         for s in self.dropping_squares:
@@ -231,7 +230,6 @@ class SceneMap(SceneBase):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
-                self.update_screen()
 
     def copy_squares(self) -> tuple:
         former_squares = []
