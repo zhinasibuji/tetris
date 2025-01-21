@@ -2,7 +2,9 @@ import sys
 import copy
 import random
 import json
+from dataclasses import dataclass
 from scene_base import *
+
 
 ARRAY_I = [
     [0, 0, 1, 0],
@@ -31,12 +33,11 @@ ARRAY_T = [
 ]
 ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
-
+@dataclass
 class Square:
-    def __init__(self, x: int, y: int, color: tuple) -> None:
-        self.color = color
-        self.x = x
-        self.y = y
+    x: int
+    y: int
+    color: tuple
 
     def __hash__(self) -> int:
         return hash((self.x, self.y))
@@ -233,8 +234,20 @@ class SceneMap(SceneBase):
                 self.keyboard_process(event.key)
                 self.update_screen()
 
+    def copy_squares(self) -> tuple:
+        former_squares = []
+        former_dropping = []
+        for s in self.squares:
+            if s in self.dropping_squares:
+                fuben = copy.copy(s)
+                former_dropping.append(fuben)
+                former_squares.append(fuben)
+            else:
+                former_squares.append(copy.copy(s))
+        return former_squares, former_dropping
+
     def keyboard_process(self, key: int) -> None:
-        former_squares = copy.deepcopy(self.squares)
+        former = self.copy_squares()
         former_squareset_x = self.squareset_x
         former_squareset_y = self.squareset_y
 
@@ -249,7 +262,7 @@ class SceneMap(SceneBase):
             self.spin()
 
         if self.is_yuejie() or self.is_chonghe():
-            self.squares = former_squares
+            self.squares, self.dropping_squares = former
             self.squareset_x = former_squareset_x
             self.squareset_y = former_squareset_y
 
