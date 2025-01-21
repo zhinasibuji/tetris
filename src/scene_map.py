@@ -238,12 +238,12 @@ class SceneMap(SceneBase):
         former_squares = []
         former_dropping = []
         for s in self.squares:
+            fuben = copy.copy(s)
             if s in self.dropping_squares:
-                fuben = copy.copy(s)
                 former_dropping.append(fuben)
                 former_squares.append(fuben)
             else:
-                former_squares.append(copy.copy(s))
+                former_squares.append(fuben)
         return former_squares, former_dropping
 
     def keyboard_process(self, key: int) -> None:
