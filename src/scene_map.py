@@ -53,7 +53,6 @@ class Square:
 class SceneMap(SceneBase):
     def __init__(self) -> None:
         super().__init__()
-        self.savefile_path = "save.json"
         self.squares = []
         self.dropping_squares = []
         self.grid = self.get_grid()
@@ -168,7 +167,7 @@ class SceneMap(SceneBase):
 
     def save_best_score(self) -> None:
         if self.score > self.best_score:
-            with open(self.savefile_path, "w") as file:
+            with open("save.json", "w") as file:
                 json.dump(self.score, file)
 
     def drop_or_land(self) -> None:
@@ -191,10 +190,10 @@ class SceneMap(SceneBase):
 
     def get_best_score(self) -> int:
         try:
-            with open(self.savefile_path, "r") as file:
+            with open("save.json", "r") as file:
                 return json.load(file)
         except FileNotFoundError:
-            with open(self.savefile_path, "w") as file:
+            with open("save.json", "w") as file:
                 json.dump(0, file)
             return 0
 
