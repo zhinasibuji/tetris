@@ -34,7 +34,6 @@ ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
 class Square:
     def __init__(self, x: int, y: int, color: tuple) -> None:
-        self.dropping = True
         self.color = color
         self.x = x
         self.y = y
@@ -55,6 +54,7 @@ class SceneMap(SceneBase):
         super().__init__()
         self.savefile_path = "save.json"
         self.squares = []
+        self.dropping_squares = []
         self.grid = self.get_grid()
         self.frame_count = 0
         self.score = 0
@@ -92,21 +92,18 @@ class SceneMap(SceneBase):
         self.frame_count += 1
 
     def squareset_down(self) -> None:
-        for s in self.squares:
-            if s.dropping:
-                s.y += 1
+        for s in self.dropping_squares:
+            s.y += 1
         self.squareset_y += 1
 
     def squareset_left(self) -> None:
-        for s in self.squares:
-            if s.dropping:
-                s.x -= 1
+        for s in self.dropping_squares:
+            s.x -= 1
         self.squareset_x -= 1
 
     def squareset_right(self) -> None:
-        for s in self.squares:
-            if s.dropping:
-                s.x += 1
+        for s in self.dropping_squares:
+            s.x += 1
         self.squareset_x += 1
 
     def direct_land(self) -> None:
@@ -127,7 +124,8 @@ class SceneMap(SceneBase):
     def spin(self) -> None:
         self.squareset_array = self.rot90(self.squareset_array)
         # 清除所有dropping_squares,根据array和pos重写之
-        self.squares = [s for s in self.squares if not s.dropping]
+        while self.dropping_squares:
+            self.squares.remove(self.dropping_squares.pop())
 
         self.put_squareset_into_squares()
 
@@ -156,9 +154,7 @@ class SceneMap(SceneBase):
                 self.score += 1
 
     def land(self) -> None:
-        # 将所有squares的dropping设为False
-        for square in self.squares:
-            square.dropping = False
+        self.dropping_squares.clear()
         self.xiaochu_manhang()
         self.create_squareset()
         if self.is_chonghe():
@@ -187,6 +183,7 @@ class SceneMap(SceneBase):
     def create_square(self, x: int, y: int, color: tuple) -> None:
         s = Square(x, y, color)
         self.squares.append(s)
+        self.dropping_squares.append(s)
 
     def get_difficulty(self) -> int:
         return max(5, DIFFICULTY - self.score)
