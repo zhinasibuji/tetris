@@ -108,13 +108,11 @@ class SceneMap(SceneBase):
     def direct_land(self) -> None:
         while True:
             former_squares = copy.deepcopy(self.squares)
-            former_squareset_y = self.squareset_y
             self.squareset_down()
             if self.is_yuejie() or self.is_chonghe():
                 break
 
         self.squares = former_squares
-        self.squareset_y = former_squareset_y
         self.land()
 
     def rot90(self, array) -> list:
@@ -153,6 +151,10 @@ class SceneMap(SceneBase):
                 self.score += 1
 
     def land(self) -> None:
+        '''
+            创建并覆盖dropping_squares和squareset有关变量。
+            若重合则游戏失败。
+        '''
         self.dropping_squares.clear()
         self.xiaochu_manhang()
         self.create_squareset()
@@ -171,12 +173,10 @@ class SceneMap(SceneBase):
 
     def drop_or_land(self) -> None:
         former_squares = copy.deepcopy(self.squares)
-        former_squareset_y = self.squareset_y
         self.squareset_down()
 
         if self.is_yuejie() or self.is_chonghe():
             self.squares = former_squares
-            self.squareset_y = former_squareset_y
             self.land()
 
     def create_square(self, x: int, y: int, color: tuple) -> None:
@@ -236,11 +236,10 @@ class SceneMap(SceneBase):
         former_dropping = []
         for s in self.squares:
             fuben = copy.copy(s)
+            former_squares.append(fuben)
             if s in self.dropping_squares:
                 former_dropping.append(fuben)
-                former_squares.append(fuben)
-            else:
-                former_squares.append(fuben)
+
         return former_squares, former_dropping
 
     def keyboard_process(self, key: int) -> None:
