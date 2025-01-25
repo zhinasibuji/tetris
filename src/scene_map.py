@@ -151,13 +151,12 @@ class SceneMap(SceneBase):
                 self.score += 1
 
     def land(self) -> None:
-        '''
-            创建并覆盖dropping_squares和squareset有关变量。
-            若重合则游戏失败。
-        '''
-        self.dropping_squares.clear()
         self.xiaochu_manhang()
+        
+        # 创建并覆盖dropping_squares和squareset有关变量。
+        self.dropping_squares.clear()
         self.create_squareset()
+
         if self.is_chonghe():
             self.gameover()
 
