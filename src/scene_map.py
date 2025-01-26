@@ -131,6 +131,7 @@ class SceneMap(SceneBase):
         self.squareset_y = 0
         self.squareset_color = random.choice((RED, GREEN, BLUE))
 
+        self.dropping_squares.clear()
         self.put_squareset_into_squares()
 
     def xiaochu_benhang(self, line: int) -> None:
@@ -151,7 +152,6 @@ class SceneMap(SceneBase):
         self.xiaochu_manhang()
         
         # 创建并覆盖dropping_squares和squareset有关变量。
-        self.dropping_squares.clear()
         self.create_squareset()
 
         if self.is_chonghe():
@@ -241,7 +241,7 @@ class SceneMap(SceneBase):
     def keyboard_process(self, key: int) -> None:
         former = self.copy_squares()
         former_squareset_x = self.squareset_x
-        
+
         if key == pygame.K_LEFT:
             self.squareset_left()
         elif key == pygame.K_RIGHT:
