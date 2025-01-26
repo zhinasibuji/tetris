@@ -241,8 +241,7 @@ class SceneMap(SceneBase):
     def keyboard_process(self, key: int) -> None:
         former = self.copy_squares()
         former_squareset_x = self.squareset_x
-        former_squareset_y = self.squareset_y
-
+        
         if key == pygame.K_LEFT:
             self.squareset_left()
         elif key == pygame.K_RIGHT:
@@ -256,7 +255,6 @@ class SceneMap(SceneBase):
         if self.is_yuejie() or self.is_chonghe():
             self.squares, self.dropping_squares = former
             self.squareset_x = former_squareset_x
-            self.squareset_y = former_squareset_y
 
 
 if __name__ == '__main__':
