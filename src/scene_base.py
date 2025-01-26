@@ -50,7 +50,10 @@ class SceneBase:
         while self.next_scene is None:
             self.input_process()
             self.data_process()
+
+            screen.fill(BLACK)
             self.update_screen()
+            pygame.display.flip()
 
             clock.tick(60)
 

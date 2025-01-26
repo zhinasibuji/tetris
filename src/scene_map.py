@@ -62,11 +62,9 @@ class SceneMap(SceneBase):
         self.create_squareset()
 
     def update_screen(self) -> None:
-        screen.fill(BLACK)
         self.draw_map()
-        screen.blit(self.grid, (0, 0))
         self.draw_score()
-        pygame.display.flip()
+        screen.blit(self.grid, (0, 0))
 
     def draw_map(self) -> None:
         for square in self.squares:

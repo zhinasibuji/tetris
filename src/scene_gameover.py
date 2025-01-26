@@ -8,10 +8,8 @@ class SceneGameover(SceneBase):
         self.choice = 0
 
     def update_screen(self) -> None:
-        screen.fill(BLACK)
         self.draw_gameover()
         self.draw_choices()
-        pygame.display.flip()
 
     def input_process(self) -> None:
         for event in pygame.event.get():
