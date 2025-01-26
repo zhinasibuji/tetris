@@ -115,7 +115,7 @@ class SceneMap(SceneBase):
         self.squares = former_squares
         self.land()
 
-    def rot90(self, array) -> list:
+    def rot90(self, array) -> list[list[int]]:
         return list(zip(*array[::-1]))
 
     def spin(self) -> None:
