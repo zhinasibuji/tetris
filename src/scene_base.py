@@ -50,8 +50,12 @@ class SceneBase:
         while self.next_scene is None:
             self.input_process()
             self.data_process()
+            self.update_screen()
 
             clock.tick(60)
+
+    def update_screen(self) -> None:
+        pass
 
     def data_process(self) -> None:
         pass

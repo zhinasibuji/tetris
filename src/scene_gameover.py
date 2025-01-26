@@ -6,7 +6,6 @@ class SceneGameover(SceneBase):
     def __init__(self) -> None:
         super().__init__()
         self.choice = 0
-        self.update_screen()
 
     def update_screen(self) -> None:
         screen.fill(BLACK)
@@ -20,7 +19,6 @@ class SceneGameover(SceneBase):
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 self.keyboard_process(event.key)
-                self.update_screen()
 
     def keyboard_process(self, key: int) -> None:
         from scene_map import SceneMap
@@ -28,7 +26,7 @@ class SceneGameover(SceneBase):
             self.choice = max(0, self.choice - 1)
         elif key == pygame.K_DOWN:
             self.choice = min(1, self.choice + 1)
-        if key == pygame.K_SPACE:
+        elif key == pygame.K_SPACE:
             if self.choice == 0:
                 self.next_scene = SceneMap()
             elif self.choice == 1:

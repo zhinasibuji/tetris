@@ -88,7 +88,6 @@ class SceneMap(SceneBase):
             self.drop_or_land()
             self.frame_count = 0
         self.frame_count += 1
-        self.update_screen()
 
     def squareset_down(self) -> None:
         for s in self.dropping_squares:
