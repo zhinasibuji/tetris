@@ -132,9 +132,7 @@ class SceneMap(SceneBase):
         self.put_squareset_into_squares()
 
     def create_squareset(self) -> None:
-        # 随机位置，随机形状，随机颜色
         self.squareset = Squareset()
-
         self.dropping_squares.clear()
         self.put_squareset_into_squares()
 
@@ -154,10 +152,8 @@ class SceneMap(SceneBase):
 
     def land(self) -> None:
         self.xiaochu_manhang()
-        
         # 创建并覆盖dropping_squares和squareset有关变量。
         self.create_squareset()
-
         if self.is_chonghe():
             self.gameover()
 
