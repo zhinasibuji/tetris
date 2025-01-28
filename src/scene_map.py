@@ -49,6 +49,14 @@ class Square:
         return self.y not in range(MAP_HEIGHT) or \
             self.x not in range(MAP_WIDTH)
 
+class Squareset:
+    def __init__(self) -> None:
+        self.array = random.choice(ARRAYS)
+        array_width = len(self.array)
+        self.x = random.randint(0, MAP_WIDTH - array_width)
+        self.y = 0
+        self.color = random.choice((RED, GREEN, BLUE))
+
 
 class SceneMap(SceneBase):
     def __init__(self) -> None:
@@ -90,17 +98,17 @@ class SceneMap(SceneBase):
     def squareset_down(self) -> None:
         for s in self.dropping_squares:
             s.y += 1
-        self.squareset_y += 1
+        self.squareset.y += 1
 
     def squareset_left(self) -> None:
         for s in self.dropping_squares:
             s.x -= 1
-        self.squareset_x -= 1
+        self.squareset.x -= 1
 
     def squareset_right(self) -> None:
         for s in self.dropping_squares:
             s.x += 1
-        self.squareset_x += 1
+        self.squareset.x += 1
 
     def direct_land(self) -> None:
         while True:
@@ -116,7 +124,7 @@ class SceneMap(SceneBase):
         return list(zip(*array[::-1]))
 
     def spin(self) -> None:
-        self.squareset_array = self.rot90(self.squareset_array)
+        self.squareset.array = self.rot90(self.squareset.array)
         # 清除所有dropping_squares,根据array和pos重写之
         while self.dropping_squares:
             self.squares.remove(self.dropping_squares.pop())
@@ -125,11 +133,7 @@ class SceneMap(SceneBase):
 
     def create_squareset(self) -> None:
         # 随机位置，随机形状，随机颜色
-        self.squareset_array = random.choice(ARRAYS)
-        array_width = len(self.squareset_array)
-        self.squareset_x = random.randint(0, MAP_WIDTH - array_width)
-        self.squareset_y = 0
-        self.squareset_color = random.choice((RED, GREEN, BLUE))
+        self.squareset = Squareset()
 
         self.dropping_squares.clear()
         self.put_squareset_into_squares()
@@ -206,12 +210,12 @@ class SceneMap(SceneBase):
         return result
 
     def put_squareset_into_squares(self) -> None:
-        for x, line in enumerate(self.squareset_array):
+        for x, line in enumerate(self.squareset.array):
             for y, num in enumerate(line):
                 if num == 1:
-                    self.create_square(x + self.squareset_x,
-                                       y + self.squareset_y,
-                                       self.squareset_color)
+                    self.create_square(x + self.squareset.x,
+                                       y + self.squareset.y,
+                                       self.squareset.color)
 
     def is_chonghe(self) -> bool:
         return len(self.squares) != len(set(self.squares))
@@ -240,7 +244,7 @@ class SceneMap(SceneBase):
 
     def keyboard_process(self, key: int) -> None:
         former = self.copy_squares()
-        former_squareset_x = self.squareset_x
+        former_squareset_x = self.squareset.x
 
         if key == pygame.K_LEFT:
             self.squareset_left()
@@ -254,7 +258,7 @@ class SceneMap(SceneBase):
 
         if self.is_yuejie() or self.is_chonghe():
             self.squares, self.dropping_squares = former
-            self.squareset_x = former_squareset_x
+            self.squareset.x = former_squareset_x
 
 
 if __name__ == '__main__':
