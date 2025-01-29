@@ -33,6 +33,7 @@ ARRAY_T = [
 ]
 ARRAYS = (ARRAY_I, ARRAY_O, ARRAY_J, ARRAY_L, ARRAY_T)
 
+
 @dataclass
 class Square:
     x: int
@@ -49,6 +50,7 @@ class Square:
         return self.y not in range(MAP_HEIGHT) or \
             self.x not in range(MAP_WIDTH)
 
+
 class Squareset:
     def __init__(self) -> None:
         self.array = random.choice(ARRAYS)
@@ -56,6 +58,17 @@ class Squareset:
         self.x = random.randint(0, MAP_WIDTH - array_width)
         self.y = 0
         self.color = random.choice((RED, GREEN, BLUE))
+        self.image = pygame.Surface((array_width * 20, array_width * 20))
+        for array_x, line in enumerate(self.array):
+            for array_y, num in enumerate(line):
+                if num == 1:
+                    square_rect = pygame.Rect(
+                        array_x * 20, array_y * 20, 20, 20)
+                    pygame.draw.rect(self.image, self.color, square_rect)
+                    pygame.draw.rect(self.image, WHITE, square_rect,
+                                     width=LINE_THICKNESS)
+        self.rect = self.image.get_rect()
+        self.rect.center = (500, 500)
 
 
 class SceneMap(SceneBase):
@@ -67,11 +80,13 @@ class SceneMap(SceneBase):
         self.frame_count = 0
         self.score = 0
         self.best_score = self.get_best_score()
+        self.next_squareset = Squareset()
         self.create_squareset()
 
     def update_screen(self) -> None:
         self.draw_map()
         self.draw_score()
+        self.display_squareset(self.next_squareset)
         screen.blit(self.grid, (0, 0))
 
     def draw_map(self) -> None:
@@ -79,15 +94,15 @@ class SceneMap(SceneBase):
             self.draw_square(square.x, square.y, square.color)
 
     def draw_score(self) -> None:
-        x = int(SCREEN_WIDTH * 5 / 6)
-        y1 = int(SCREEN_HEIGHT * 1 / 6)
-        y2 = y1 + 50
-        self.draw_text(x, y1, SCORE + str(self.score))
-        self.draw_text(x, y2, HIGH_SCORE + str(self.best_score))
+        self.draw_text(500, 100, SCORE + str(self.score))
+        self.draw_text(500, 150, HIGH_SCORE + str(self.best_score))
 
     def draw_square(self, x: int, y: int, color: tuple) -> None:
         square_rect = pygame.Rect(x * 20, y * 20, 20, 20)
         pygame.draw.rect(screen, color, square_rect)
+
+    def display_squareset(self, squareset) -> None:
+        screen.blit(squareset.image, squareset.rect)
 
     def data_process(self) -> None:
         if self.frame_count >= self.get_difficulty():
@@ -132,7 +147,8 @@ class SceneMap(SceneBase):
         self.put_squareset_into_squares()
 
     def create_squareset(self) -> None:
-        self.squareset = Squareset()
+        self.squareset = self.next_squareset
+        self.next_squareset = Squareset()
         self.dropping_squares.clear()
         self.put_squareset_into_squares()
 
