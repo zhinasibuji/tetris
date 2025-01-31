@@ -168,7 +168,6 @@ class SceneMap(SceneBase):
 
     def land(self) -> None:
         self.xiaochu_manhang()
-        # 创建并覆盖dropping_squares和squareset有关变量。
         self.create_squareset()
         if self.is_chonghe():
             self.gameover()
@@ -189,6 +188,7 @@ class SceneMap(SceneBase):
 
         if self.is_yuejie() or self.is_chonghe():
             self.squares = former_squares
+            # 将新建并覆盖dropping_squares和squareset有关变量。
             self.land()
 
     def create_square(self, x: int, y: int, color: tuple) -> None:
