@@ -14,32 +14,22 @@ LINE_THICKNESS = 1
 DIFFICULTY = 30  # 初始难度，多少帧下降一次，越大难度越低
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
-FONTS = ("simhei", "notosanscjksc")
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("俄罗斯方块")
 clock = pygame.time.Clock()
 
-big_font = pygame.font.SysFont(FONTS, 64)
-small_font = pygame.font.SysFont(FONTS, 32)
+big_font = pygame.font.Font("font.woff", 64)
+small_font = pygame.font.Font("font.woff", 32)
 
-if pygame.font.match_font(FONTS):
-    GAMEOVER = "游戏失败"
-    AGAIN = "再来一次"
-    EXIT = "退出游戏"
-    TETRIS = "俄罗斯方块"
-    START = "开始游戏"
-    SCORE = "得分："
-    HIGH_SCORE = "最高分："
-else:
-    GAMEOVER = "GAMEOVER"
-    AGAIN = "AGAIN"
-    EXIT = "EXIT"
-    TETRIS = "TETRIS"
-    START = "START"
-    SCORE = "SCORE: "
-    HIGH_SCORE = "HIGH_SCORE: "
+GAMEOVER = "游戏失败"
+AGAIN = "再来一次"
+EXIT = "退出游戏"
+TETRIS = "俄罗斯方块"
+START = "开始游戏"
+SCORE = "得分："
+HIGH_SCORE = "最高分："
 
 
 class SceneBase:
